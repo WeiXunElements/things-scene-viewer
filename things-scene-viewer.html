@@ -1,0 +1,107 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <things-scene-viewer></things-scene-viewer>
+
+Example:
+
+    <things-scene-viewer>
+      <h2>Hello things-scene-viewer</h2>
+    </things-scene-viewer>
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="things-scene-viewer">
+  <template>
+  </template>
+
+  <script src="../bwip/bwip-min.js"></script>
+  <script src="../things-scene/things-scene-min.js"></script>
+
+  <script>
+    Polymer({
+      is: 'things-scene-viewer',
+
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
+      properties: {
+        model: {
+          type: Object,
+          notify: true,
+          observer: '_onModelChanged'
+        }
+      },
+
+      listeners: {
+        'mode-changed': '_onModeChanged',
+        'iron-resize': '_onIronResize'
+      },
+
+      // See below for lifecycle callbacks
+      ready: function() {
+      },
+
+      attached: function() {
+        this.async(this.notifyResize, 1);
+      },
+
+      _onIronResize: function(e) {
+        if(this.viewer)
+          this.viewer.resize()
+      },
+
+      _onModelChanged: function(after, before) {
+
+        if(before) {
+          this.viewer.dispose()
+        }
+
+        if(!after) {
+          this.viewer = null
+          return
+        }
+
+        this.viewer = scene.create({
+          target: this,
+          model: after,
+          layers: [],
+          handlers: []
+        });
+
+        this._onModeChanged()
+      },
+
+      _onModeChanged: function() {
+        if(!this.viewer)
+          return
+
+        this.viewer.mode(this.mode)
+        /* shift 모드인 경우에는 커서를 바꾼다 */
+        if(this.viewer.mode() === 2)
+          this.style.cursor = "all-scroll"
+        else
+          this.style.cursor = null
+      }
+    });
+  </script>
+</dom-module>
