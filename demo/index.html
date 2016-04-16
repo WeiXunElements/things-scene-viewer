@@ -15,33 +15,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>things-scene-viewer Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../things-scene-viewer.html">
+
+    <style is="custom-style">
+    #scene {
+      display: block;
+      width: 200px;
+      height: 200px;
+    }
+    </style>
   </head>
   <body unresolved>
 
-    <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
-
-    <p>Make words! <button id="saybtn">Say Something</button></p>
-    <p>Make lasers! <button id="laserbtn">Fire lasers</button></p>
-
-    <things-scene-viewer author='{"name": "Lord Meowser", "image": "http://lorempixel.com/g/300/200/cats/"}' fancy>
-      <h2>Hello things-scene-viewer</h2>
-    </things-scene-viewer>
+    <template is="dom-bind" id="app">
+      <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
+  
+      <things-scene-viewer id="scene" model='{{model}}'>
+      </things-scene-viewer>
+      
+      <button id="change">Change Value</button>
+    </template>
 
     <script>
-      var seedElement = document.querySelector('things-scene-viewer');
+      window.addEventListener('WebComponentsReady', function(e) {
+        var app = document.querySelector('#app')
 
-      document.querySelector('#saybtn').addEventListener('click', function() {
-        alert(seedElement.sayHello('Hallo!'));
+        app.$.change.addEventListener('click', function() {
+          var viewer = app.$.scene
+          viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
+        })
+        
+        app.model = {
+          components: [{
+            type: 'progress-circle',
+            name: '테스트용 프로그레스',
+            cx: 200,
+            cy: 200,
+            rx: 150,
+            ry: 150,
+            fontSize: 80,
+            strokeStyle: '#552555',
+            fontColor: '#FF0000',
+            lineWidth: 30,
+            value: 75,
+            alpha: 0.8,
+            text: "#{value}%"
+          }]                    
+        }
       });
-
-      document.querySelector('#laserbtn').addEventListener('click', function() {
-        seedElement.fireLasers();
-      });
-
-      document.addEventListener("things-scene-viewer-lasers", function(e) {
-        console.log(e.detail.sound);
-      });
-
     </script>
 
   </body>

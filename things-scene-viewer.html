@@ -49,6 +49,12 @@ Example:
           type: Object,
           notify: true,
           observer: '_onModelChanged'
+        },
+        mode: {
+          /* mode 1 : edit mode, mode 2 : shift mode */
+          type: Number,
+          notify: true,
+          value: 2
         }
       },
 
@@ -63,6 +69,10 @@ Example:
 
       attached: function() {
         this.async(this.notifyResize, 1);
+      },
+      
+      findAll(selector) {
+        return this.viewer.findAll(selector)
       },
 
       _onIronResize: function(e) {
