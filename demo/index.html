@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>things-scene-viewer Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
     <link rel="import" href="../things-scene-viewer.html">
 
     <style is="custom-style">
@@ -23,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       src: url("fonts/VeraSeBd.ttf");
     }
 
-    #scene {
+    things-scene-viewer {
       display: block;
       width: 200px;
       height: 200px;
@@ -35,10 +36,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
   
-      <things-scene-viewer id="scene" model='{{model}}'>
+      <things-scene-viewer id='scene' model='{{model}}'>
+        <things-scene-layer type="shift-layer"/>
+        <things-scene-component type="chart-bar"/>
+        <things-scene-component type="chart-pie"/>
       </things-scene-viewer>
       
       <button id="change">Change Value</button>
+
     </template>
 
     <script>

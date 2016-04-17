@@ -9,8 +9,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<link rel="import" href="./things-scene-component.html">
+<link rel="import" href="./things-scene-layer.html">
+<link rel="import" href="./things-scene-handler.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -31,6 +34,7 @@ Example:
 
 <dom-module id="things-scene-viewer">
   <template>
+    <content></content>
   </template>
 
   <script src="../bwip/bwip-min.js"></script>
@@ -64,10 +68,24 @@ Example:
       },
 
       // See below for lifecycle callbacks
-      ready: function() {
+      ready() {
+        var components = this.querySelectorAll('things-scene-component')
+        console.log('components', components)
+
+        this._layers = Array.from(this.querySelectorAll('things-scene-layer'))
+        .map(function(layer) {
+          return {
+            type: layer.getAttribute('type')
+          }
+        })
+
+        this._handlers = Array.from(this.querySelectorAll('things-scene-handler'))
+        .map(function(handler) {
+          return handler.getAttribute('type')
+        })
       },
 
-      attached: function() {
+      attached() {
         this.async(this.notifyResize, 1);
       },
       
@@ -75,12 +93,12 @@ Example:
         return this.viewer.findAll(selector)
       },
 
-      _onIronResize: function(e) {
+      _onIronResize(e) {
         if(this.viewer)
           this.viewer.resize()
       },
 
-      _onModelChanged: function(after, before) {
+      _onModelChanged(after, before) {
 
         if(before) {
           this.viewer.dispose()
@@ -94,14 +112,16 @@ Example:
         this.viewer = scene.create({
           target: this,
           model: after,
-          layers: [],
-          handlers: []
+          layers: this._layers,
+          handlers: this._handlers
         });
+        
+        console.log(this._layers)
 
         this._onModeChanged()
       },
 
-      _onModeChanged: function() {
+      _onModeChanged() {
         if(!this.viewer)
           return
 
