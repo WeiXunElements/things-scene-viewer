@@ -17,6 +17,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../things-scene-viewer.html">
 
     <style is="custom-style">
+
+    @font-face {
+      font-family: "Bitstream Vera Serif Bold";
+      src: url("fonts/VeraSeBd.ttf");
+    }
+
     #scene {
       display: block;
       width: 200px;
@@ -58,7 +64,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             lineWidth: 30,
             value: 75,
             alpha: 0.8,
-            text: "#{value}%"
+            text: "#{value}%",
+            fontFamily: 'Bitstream Vera Serif Bold'
           }]                    
         }
       });
