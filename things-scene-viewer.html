@@ -55,23 +55,35 @@ Example:
         },
         model: {
           type: Object,
-          notify: true,
-          observer: '_onModelChanged'
+          notify: true
         },
         mode: {
           /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
           type: Number,
           notify: true,
           value: 2
+        },
+        dppx: {
+          type: Number,
+          notify: true
+        },
+        screenSize: {
+          type: Number,
+          notify: true
         }
       },
 
       listeners: {
-        'mode-changed': '_onModeChanged',
-        'iron-resize': '_onIronResize'
+        'iron-resize': '_onIronResize',
       },
 
-      ready() {
+      observers: [
+        "_onModelChanged(model)",
+        "_onModeChanged(mode)",
+        "_onDisplayChanged(dppx, screenSize)"
+      ],
+
+      ready: function() {
 
         this._layers = Array.from(this.querySelectorAll('things-scene-layer'))
         .map(function(layer) {
@@ -86,20 +98,20 @@ Example:
         })
       },
 
-      attached() {
+      attached: function() {
         this.async(this.notifyResize, 1);
       },
       
-      findAll(selector) {
+      findAll: function(selector) {
         return this.scene.findAll(selector)
       },
 
-      _onIronResize(e) {
+      _onIronResize: function(e) {
         if(this.scene)
           this.scene.resize()
       },
 
-      _onModelChanged(after, before) {
+      _onModelChanged: function(after, before) {
 
         if(before) {
           this.scene.dispose()
@@ -117,11 +129,21 @@ Example:
           handlers: this._handlers
         });
 
-        // this._onModeChanged()
+        this._onModeChanged(this.mode)
+        this._onDisplayChanged(this.dppx, this.screenSize)
       },
 
-      _onModeChanged(mode) {
-        console.log('mode changed', mode)
+      _onDisplayChanged: function(dppx, screenSize) {
+        if(!this.scene)
+          return
+
+        if(screenSize)
+          this.scene.screen(parseFloat(screenSize))
+        if(dppx)
+          this.scene.dppx(parseFloat(dppx))
+      },
+
+      _onModeChanged: function(mode) {
         if(!this.scene)
           return
 
@@ -133,19 +155,6 @@ Example:
           this.style.cursor = "all-scroll"
         else
           this.style.cursor = null
-
-        /* View Mode로 들어가는 경우에는 Variable Value들을 적용해준다 */
-        /* Q. 이 작업을 여기서 해줘야 하나 ? things-scene에서 처리해야되지 않나 */
-        if(this.scene.mode() === 0) {
-          var variables = this.scene.model().variables
-
-          for(let key in variables) {
-            let value = variables[key]
-
-            if(typeof(value.value) !== 'undefined')
-              this.scene.variable(key, value.value)
-          }
-        }
       }
     });
   </script>
