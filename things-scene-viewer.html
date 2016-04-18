@@ -24,7 +24,8 @@ Example:
 Example:
 
     <things-scene-viewer>
-      <h2>Hello things-scene-viewer</h2>
+      <things-scene-layer type="shift-layer"/>
+      <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
     </things-scene-viewer>
 
 @demo demo/index.html
@@ -48,13 +49,17 @@ Example:
       ],
 
       properties: {
+        scene: {
+          type: Object,
+          notify: true
+        },
         model: {
           type: Object,
           notify: true,
           observer: '_onModelChanged'
         },
         mode: {
-          /* mode 1 : edit mode, mode 2 : shift mode */
+          /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
           type: Number,
           notify: true,
           value: 2
@@ -86,45 +91,61 @@ Example:
       },
       
       findAll(selector) {
-        return this.viewer.findAll(selector)
+        return this.scene.findAll(selector)
       },
 
       _onIronResize(e) {
-        if(this.viewer)
-          this.viewer.resize()
+        if(this.scene)
+          this.scene.resize()
       },
 
       _onModelChanged(after, before) {
 
         if(before) {
-          this.viewer.dispose()
+          this.scene.dispose()
         }
 
         if(!after) {
-          this.viewer = null
+          this.scene = null
           return
         }
 
-        this.viewer = scene.create({
+        this.scene = scene.create({
           target: this,
           model: after,
           layers: this._layers,
           handlers: this._handlers
         });
-        
-        this._onModeChanged()
+
+        // this._onModeChanged()
       },
 
-      _onModeChanged() {
-        if(!this.viewer)
+      _onModeChanged(mode) {
+        console.log('mode changed', mode)
+        if(!this.scene)
           return
 
-        this.viewer.mode(this.mode)
+        this.scene.mode(parseFloat(mode))
+
+        this.scene.mode(this.mode)
         /* shift 모드인 경우에는 커서를 바꾼다 */
-        if(this.viewer.mode() === 2)
+        if(this.scene.mode() === 2)
           this.style.cursor = "all-scroll"
         else
           this.style.cursor = null
+
+        /* View Mode로 들어가는 경우에는 Variable Value들을 적용해준다 */
+        /* Q. 이 작업을 여기서 해줘야 하나 ? things-scene에서 처리해야되지 않나 */
+        if(this.scene.mode() === 0) {
+          var variables = this.scene.model().variables
+
+          for(let key in variables) {
+            let value = variables[key]
+
+            if(typeof(value.value) !== 'undefined')
+              this.scene.variable(key, value.value)
+          }
+        }
       }
     });
   </script>

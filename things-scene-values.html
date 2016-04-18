@@ -1,0 +1,73 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <things-scene-values scene="[[scene]]">
+    </things-scene-values>
+
+@demo demo/index-values.html
+@hero hero.svg
+-->
+
+<dom-module id="things-scene-values">
+  <template>
+    <style>
+      :host {
+        @apply(--things-scene-values);
+      }
+
+      paper-input {
+        @apply(--things-scene-values-input);
+      }
+    </style>
+
+    <template is="dom-repeat" items="[[_toVariable(scene)]]">
+      <paper-input label="[[item.name]]"
+                   always-float-label
+                   placeholder="[[item.name]]"
+                   data-variable$="[[item.key]]"
+                   value="[[item.value]]">
+      </paper-input>
+    </template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'things-scene-values',
+
+        properties: {
+          scene: Object
+        },
+
+        listeners: {
+          'change': '_onValueChanged'
+        },
+
+        _toVariable: function(scene) {
+          return scene.model().variables
+        },
+
+        _onValueChanged: function(e) {
+          var input = e.target;
+
+          while (!input.hasAttribute('data-variable') && input !== document.body)
+            input = input.parentElement;
+
+          var variable = input.getAttribute('data-variable')
+
+          if(typeof(variable) !== 'undefined') {
+            this.scene.variable(variable, e.target.value)
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>
