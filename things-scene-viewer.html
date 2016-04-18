@@ -11,7 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
-<link rel="import" href="./things-scene-component.html">
 <link rel="import" href="./things-scene-layer.html">
 <link rel="import" href="./things-scene-handler.html">
 
@@ -67,16 +66,13 @@ Example:
         'iron-resize': '_onIronResize'
       },
 
-      // See below for lifecycle callbacks
       ready() {
-        var components = this.querySelectorAll('things-scene-component')
-        console.log('components', components)
 
         this._layers = Array.from(this.querySelectorAll('things-scene-layer'))
         .map(function(layer) {
-          return {
+          return Object.assign({
             type: layer.getAttribute('type')
-          }
+          }, layer.model)
         })
 
         this._handlers = Array.from(this.querySelectorAll('things-scene-handler'))
@@ -116,8 +112,6 @@ Example:
           handlers: this._handlers
         });
         
-        console.log(this._layers)
-
         this._onModeChanged()
       },
 

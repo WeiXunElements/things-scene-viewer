@@ -17,6 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <link rel="import" href="../things-scene-viewer.html">
 
+    <link rel="import" href="./layers/confidential-overlay.html">
+
     <style is="custom-style">
 
     @font-face {
@@ -38,8 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
       <things-scene-viewer id='scene' model='{{model}}'>
         <things-scene-layer type="shift-layer"/>
-        <things-scene-component type="chart-bar"/>
-        <things-scene-component type="chart-pie"/>
+        <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
       </things-scene-viewer>
       
       <button id="change">Change Value</button>
@@ -72,6 +73,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             text: "#{value}%",
             fontFamily: 'Bitstream Vera Serif Bold'
           }]                    
+        }
+
+        app.confidential = {
+          text: 'HATIOLAB. CONFIDENTIAL'
         }
       });
     </script>
