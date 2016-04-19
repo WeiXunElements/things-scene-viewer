@@ -12,16 +12,15 @@
   ],
   "main": "things-scene-viewer.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/ThingsElements/things-scene-viewer",
   "ignore": [
     "/.*",
     "/test/"
   ],
   "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "polymer": "Polymer/polymer#^1.2.0",
-    "bwip": "^0.7.1",
     "things-scene": "^0.4.20"
   },
   "devDependencies": {

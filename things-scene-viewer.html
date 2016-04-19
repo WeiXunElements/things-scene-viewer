@@ -34,7 +34,14 @@ Example:
 
 <dom-module id="things-scene-viewer">
   <template>
+    <style>
+      :host {
+        @apply(--things-scene-viewer);
+      }
+    </style>
+
     <content></content>
+
   </template>
 
   <script src="../bwip/bwip-min.js"></script>
