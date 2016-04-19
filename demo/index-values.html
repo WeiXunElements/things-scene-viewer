@@ -45,12 +45,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>
   
-      <things-scene-viewer id="scene" scene="{{scene}}" model="{{model}}" mode="0">
+      <things-scene-viewer id="scene"
+                           model="[[model]]"
+                           values="[[values]]"
+                           variables="{{variables}}">
       </things-scene-viewer>
       
       <p>Variables : you can change the value above</p>
-      <things-scene-values scene="[[scene]]">
+      <things-scene-values variables-model="[[variables]]"
+                           values="{{values}}">
       </things-scene-values>
+
+      <button id="change">Change Model</button>
 
     </template>
 
@@ -58,7 +64,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       window.addEventListener('WebComponentsReady', function(e) {
         var app = document.querySelector('#app')
 
-        app.model = {
+        var model_1 = {
+          width: 100,
+          height: 100,
           components: [{
             id: 'percent',
             type: 'progress-circle',
@@ -87,7 +95,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               rule: 'value'
             }]
           }]             
+        }        
+
+        var model_2 = {
+          components: [{
+            id: 'value',
+            type: 'progress-circle',
+            name: '테스트용 프로그레스',
+            cx: 200,
+            cy: 200,
+            rx: 150,
+            ry: 150,
+            fontSize: 80,
+            strokeStyle: '#552555',
+            fontColor: '#FF0000',
+            lineWidth: 30,
+            value: 90,
+            alpha: 0.8,
+            text: "#{value}"
+          }],
+          variables: [{
+            key: 'value',
+            name: 'Value',
+            type: 'number',
+            value: '49',
+            mappings: [{
+              target: '#value',
+              property: 'value',
+              rule: 'value'
+            }]
+          }]             
         }
+
+        var current_model = model_1
+
+        app.model = current_model
+
+        app.$.change.addEventListener('click', function() {
+          if(current_model === model_1)
+            current_model = model_2
+          else
+            current_model = model_1
+
+          app.model = current_model
+        })
+
       });
     </script>
 

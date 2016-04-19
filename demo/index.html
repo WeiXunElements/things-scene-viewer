@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
   
-      <things-scene-viewer id='scene' model='{{model}}'>
+      <things-scene-viewer id='scene' model='[[model]]'>
         <things-scene-layer type="shift-layer"/>
         <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
       </things-scene-viewer>

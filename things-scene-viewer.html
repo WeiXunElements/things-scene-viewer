@@ -54,22 +54,29 @@ Example:
           notify: true
         },
         model: {
-          type: Object,
-          notify: true
+          type: Object
         },
         mode: {
           /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
           type: Number,
-          notify: true,
           value: 2
         },
         dppx: {
-          type: Number,
-          notify: true
+          type: Number
         },
         screenSize: {
-          type: Number,
+          type: Number
+        },
+        variables: {
+          type: Object,
           notify: true
+        },
+        values: {
+          type: Object
+        },
+        fit: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -80,7 +87,8 @@ Example:
       observers: [
         "_onModelChanged(model)",
         "_onModeChanged(mode)",
-        "_onDisplayChanged(dppx, screenSize)"
+        "_onDisplayChanged(dppx, screenSize)",
+        "_onValuesChanged(values)"
       ],
 
       ready: function() {
@@ -107,30 +115,33 @@ Example:
       },
 
       _onIronResize: function(e) {
-        if(this.scene)
+        if(this.scene) {
           this.scene.resize()
+          if(this.fit)
+            this._fitSize()
+        }
       },
 
-      _onModelChanged: function(after, before) {
-
-        if(before) {
+      _onModelChanged: function(model) {
+        if(this.scene)
           this.scene.dispose()
-        }
 
-        if(!after) {
+        if(!model) {
           this.scene = null
           return
         }
 
-        delete after.rotation
-        delete after.translate
-
         this.scene = scene.create({
           target: this,
-          model: after,
+          model: model,
           layers: this._layers,
           handlers: this._handlers
         });
+
+        if(this.fit)
+          this._fitSize()
+
+        this.variables = model.variables
 
         this._onModeChanged(this.mode)
         this._onDisplayChanged(this.dppx, this.screenSize)
@@ -158,7 +169,27 @@ Example:
           this.style.cursor = "all-scroll"
         else
           this.style.cursor = null
+      },
+
+      _onValuesChanged: function(values) {
+        if(!this.scene || !values)
+          return
+
+        for(var key in values)
+          this.scene.variable(key, values[key])
+      },
+
+      _fitSize: function() {
+        if(!this.scene)
+          return
+
+        var width = this.model.width, height = this.model.height
+        var vw = this.offsetWidth, vh = this.offsetHeight
+
+        var dpr = window.devicePixelRatio || 1
+        this.scene.scale(vw / width * dpr, vh / height * dpr)
       }
+
     });
   </script>
 </dom-module>
