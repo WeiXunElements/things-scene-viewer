@@ -122,6 +122,9 @@ Example:
           return
         }
 
+        delete after.rotation
+        delete after.translate
+
         this.scene = scene.create({
           target: this,
           model: after,
