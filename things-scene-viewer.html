@@ -115,6 +115,11 @@ Example:
         this.async(this.notifyResize, 1);
       },
       
+      detached: function() {
+        if(this.scene)
+          this.scene.dispose()
+      },
+
       findAll: function(selector) {
         return this.scene.findAll(selector)
       },
