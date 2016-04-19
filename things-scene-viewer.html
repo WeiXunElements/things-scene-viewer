@@ -59,6 +59,7 @@ Example:
         mode: {
           /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
           type: Number,
+          notify: true,
           value: 2
         },
         dppx: {
@@ -77,6 +78,10 @@ Example:
         fit: {
           type: Boolean,
           value: false
+        },
+        selected: {
+          type: Array,
+          notify: true
         }
       },
 
@@ -123,8 +128,11 @@ Example:
       },
 
       _onModelChanged: function(model) {
-        if(this.scene)
+        if(this.scene) {
+          this.scene.off('selected', this._onSelectedChanged, this)
+          this.scene.off('mode', this._onSceneModeChanged, this)
           this.scene.dispose()
+        }
 
         if(!model) {
           this.scene = null
@@ -142,6 +150,9 @@ Example:
           this._fitSize()
 
         this.variables = model.variables
+
+        this.scene.on('selected', this._onSelectedChanged, this)
+        this.scene.on('mode', this._onSceneModeChanged, this)
 
         this._onModeChanged(this.mode)
         this._onDisplayChanged(this.dppx, this.screenSize)
@@ -161,14 +172,8 @@ Example:
         if(!this.scene)
           return
 
-        this.scene.mode(parseFloat(mode))
-
-        this.scene.mode(this.mode)
-        /* shift 모드인 경우에는 커서를 바꾼다 */
-        if(this.scene.mode() === 2)
-          this.style.cursor = "all-scroll"
-        else
-          this.style.cursor = null
+        if(this.scene.mode() !== parseFloat(mode))
+          this.scene.mode(parseFloat(mode))
       },
 
       _onValuesChanged: function(values) {
@@ -188,6 +193,23 @@ Example:
 
         var dpr = window.devicePixelRatio || 1
         this.scene.scale(vw / width * dpr, vh / height * dpr)
+      },
+
+      _onSelectedChanged: function(before, after) {
+        this.selected = after
+      },
+
+      _onSceneModeChanged: function(after, before) {
+        if(!this.scene)
+          return
+
+        if(this.mode != after)
+          this.mode = after
+
+        if(after === 2)
+          this.style.cursor = "all-scroll"
+        else
+          this.style.cursor = null
       }
 
     });
