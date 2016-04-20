@@ -29,6 +29,7 @@ Example:
     </things-scene-viewer>
 
 @demo demo/index.html
+@demo demo/index-value.html
 @hero hero.svg
 -->
 
@@ -104,18 +105,6 @@ Example:
       ],
 
       ready: function() {
-
-        this._layers = Array.from(this.querySelectorAll('things-scene-layer'))
-        .map(function(layer) {
-          return Object.assign({
-            type: layer.getAttribute('type')
-          }, layer.model)
-        })
-
-        this._handlers = Array.from(this.querySelectorAll('things-scene-handler'))
-        .map(function(handler) {
-          return handler.getAttribute('type')
-        })
       },
 
       attached: function() {
@@ -151,11 +140,23 @@ Example:
           return
         }
 
+        var layers = Array.from(this.querySelectorAll('things-scene-layer'))
+        .map(function(layer) {
+          return Object.assign({
+            type: layer.getAttribute('type')
+          }, layer.model)
+        })
+
+        var handlers = Array.from(this.querySelectorAll('things-scene-handler'))
+        .map(function(handler) {
+          return handler.getAttribute('type')
+        })
+
         this.scene = scene.create({
           target: this,
           model: model,
-          layers: this._layers,
-          handlers: this._handlers
+          layers: layers,
+          handlers: handlers
         });
 
         if(this.fit)
