@@ -90,6 +90,10 @@ Example:
         selected: {
           type: Array,
           notify: true
+        },
+        disposeWhenDetached: {
+          type: Boolean,
+          value: true
         }
       },
 
@@ -112,7 +116,7 @@ Example:
       },
       
       detached: function() {
-        if(this.scene)
+        if(this.scene && this.disposeWhenDetached)
           this.scene.dispose()
       },
 
