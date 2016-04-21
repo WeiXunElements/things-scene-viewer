@@ -16,49 +16,26 @@ An element providing a solution to no problem in particular.
 Example:
 
     <things-scene-viewer>
-      <things-scene-layer type="shift-layer"/>
-      <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
+      <things-scene-layer type="abc-layer">
+        <things-scene-property name="key" value="value"></things-scene-property>
+      </things-scene-layer>
     </things-scene-viewer>
 
 @demo demo/index.html
 @hero hero.svg
 -->
 
-<dom-module id="things-scene-layer">
+<dom-module id="things-scene-property">
   <template>
   </template>
 
   <script>
     Polymer({
-      is: 'things-scene-layer',
+      is: 'things-scene-property',
 
       properties: {
-        type: String,
-        model: {
-          type: Object,
-          notify: true
-        }
-      },
-
-      attached: function() {
-        var model = {
-          type: this.type
-        }
-
-        model = Array.from(this.querySelectorAll('things-scene-property'))
-        .reduce(function(model, property) {
-          var name = property.getAttribute('name')
-          var value = property.getAttribute('value')
-
-          if(name)
-            model[name] = value
-
-          return model
-        }, model)
-
-        model.__host__ = this
-
-        this.model = model
+        name: String,
+        value: Object
       }
 
     });

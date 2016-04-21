@@ -146,9 +146,7 @@ Example:
 
         var layers = Array.from(this.querySelectorAll('things-scene-layer'))
         .map(function(layer) {
-          return Object.assign({
-            type: layer.getAttribute('type')
-          }, layer.model)
+          return layer.model
         })
 
         var handlers = Array.from(this.querySelectorAll('things-scene-handler'))
