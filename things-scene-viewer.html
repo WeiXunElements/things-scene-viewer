@@ -178,17 +178,17 @@ Example:
           return
 
         if(screenSize)
-          this.scene.screen(parseFloat(screenSize))
+          this.scene.screen = parseFloat(screenSize)
         if(dppx)
-          this.scene.dppx(parseFloat(dppx))
+          this.scene.dppx = parseFloat(dppx)
       },
 
       _onModeChanged: function(mode) {
         if(!this.scene)
           return
 
-        if(this.scene.mode() !== parseFloat(mode))
-          this.scene.mode(parseFloat(mode))
+        if(this.scene.mode !== parseFloat(mode))
+          this.scene.mode = parseFloat(mode)
       },
 
       _onValuesChanged: function(values) {
@@ -207,7 +207,10 @@ Example:
         var vw = this.offsetWidth, vh = this.offsetHeight
 
         var dpr = window.devicePixelRatio || 1
-        this.scene.scale(vw / width * dpr, vh / height * dpr)
+        this.scene.scale = {
+          x: vw / width * dpr,
+          y: vh / height * dpr
+        }
       },
 
       _onSelectedChanged: function(before, after) {
