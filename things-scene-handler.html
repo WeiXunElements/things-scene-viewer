@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../polymer/polymer.html">
 
+<link rel="import" href="./things-scene-property.html">
+
 <!--
 An element providing a solution to no problem in particular.
 
@@ -26,6 +28,7 @@ Example:
 
 <dom-module id="things-scene-handler">
   <template>
+    <content select="things-scene-property"></content>
   </template>
 
   <script>
@@ -34,7 +37,31 @@ Example:
 
       properties: {
         type: String,
-        model: Object
+        model: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      attached: function() {
+        var model = {
+          type: this.type
+        }
+
+        model = Array.from(this.querySelectorAll('things-scene-property'))
+        .reduce(function(model, property) {
+          var name = property.getAttribute('name')
+          var value = property.getAttribute('value')
+
+          if(name)
+            model[name] = value
+
+          return model
+        }, model)
+
+        model.__host__ = this
+
+        this.model = model
       }
 
     });
