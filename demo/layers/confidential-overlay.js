@@ -1,10 +1,12 @@
 (function() {
   var ConfidentialOverlay = function(model, context) {
+    if(!model.text)
+      model.text = ''
+    
     scene.Layer.call(this, model, context)
   }
 
   function _draw(context) {
-    
     context.globalAlpha = 0.3
 
     context.font="50px Verdana"

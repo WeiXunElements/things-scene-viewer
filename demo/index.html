@@ -16,9 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
     <link rel="import" href="../things-scene-viewer.html">
-
-    <link rel="import" href="./layers/confidential-overlay.html">
-
+    
     <style is="custom-style">
 
     @font-face {
@@ -28,21 +26,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     things-scene-viewer {
       display: block;
-      width: 200px;
+      width: 400px;
       height: 200px;
     }
     </style>
   </head>
   <body unresolved>
 
+    <link rel="import" href="layers/confidential-overlay.html">
+    <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
+
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
-  
-      <things-scene-viewer id='scene' model='[[model]]'>
-        <things-scene-layer type="shift-layer"/>
-        <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
-      </things-scene-viewer>
       
+      <things-scene-viewer id='scene' model='[[model]]'>
+        <things-scene-layer type="shift-layer"></things-scene-layer>
+        <things-scene-layer type="confidential-overlay">
+          <things-scene-property name="text" value="[[confidential]]"></things-scene-property>
+        </things-scene-layer>
+      </things-scene-viewer>
+
       <button id="change">Change Value</button>
 
     </template>
@@ -55,29 +58,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var viewer = app.$.scene
           viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
         })
-        
+
+        app.confidential = 'HATIOLAB. CONFIDENTIAL'
+
         app.model = {
           components: [{
             type: 'progress-circle',
             name: '테스트용 프로그레스',
-            cx: 200,
-            cy: 200,
-            rx: 150,
-            ry: 150,
-            fontSize: 80,
+            cx: 100,
+            cy: 100,
+            rx: 75,
+            ry: 75,
+            fontSize: 40,
             strokeStyle: '#552555',
             fontColor: '#FF0000',
-            lineWidth: 30,
+            lineWidth: 20,
             value: 75,
             alpha: 0.8,
             text: "#{value}%",
             fontFamily: 'Bitstream Vera Serif Bold'
-          }]                    
+          }]          
         }
 
-        app.confidential = {
-          text: 'HATIOLAB. CONFIDENTIAL'
-        }
       });
     </script>
 
