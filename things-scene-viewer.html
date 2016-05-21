@@ -71,9 +71,6 @@ Example:
           notify: true,
           value: 2
         },
-        dppx: {
-          type: Number
-        },
         screenSize: {
           type: Number
         },
@@ -105,7 +102,7 @@ Example:
       observers: [
         "_onModelChanged(model)",
         "_onModeChanged(mode)",
-        "_onDisplayChanged(dppx, screenSize)",
+        "_onDisplayChanged(screenSize)",
         "_onValuesChanged(values)"
       ],
 
@@ -171,17 +168,15 @@ Example:
         this.scene.on('mode', this._onSceneModeChanged, this)
 
         this._onModeChanged(this.mode)
-        this._onDisplayChanged(this.dppx, this.screenSize)
+        this._onDisplayChanged(this.screenSize)
       },
 
-      _onDisplayChanged: function(dppx, screenSize) {
+      _onDisplayChanged: function(screenSize) {
         if(!this.scene)
           return
 
         if(screenSize)
           this.scene.screen = parseFloat(screenSize)
-        if(dppx)
-          this.scene.dppx = parseFloat(dppx)
       },
 
       _onModeChanged: function(mode) {
