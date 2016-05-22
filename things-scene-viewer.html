@@ -202,10 +202,9 @@ Example:
         var width = this.model.width, height = this.model.height
         var vw = this.offsetWidth, vh = this.offsetHeight
 
-        var dpr = window.devicePixelRatio || 1
         this.scene.scale = {
-          x: vw / width * dpr,
-          y: vh / height * dpr
+          x: vw / width,
+          y: vh / height
         }
       },
 

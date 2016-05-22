@@ -26,9 +26,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     things-scene-viewer {
       display: block;
-      width: 400px;
+      /*width: 400px;*/
+      /*width: 3in;*/
+      /*width: 288px;*/
+      width: 200px;
       height: 200px;
+      border-style: solid;
+      border-width: 1px;
     }
+
+    @media print { 
+      /* All your print styles go here */
+      #header, #footer, #nav { display: none !important; } 
+
+      things-scene-viewer {
+        display: block;
+        width: 10cm;
+        height: 5cm;
+        border-style: solid;
+        border-width: 1px;
+      }
+    }
+
     </style>
   </head>
   <body unresolved>
