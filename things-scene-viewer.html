@@ -161,6 +161,16 @@ Example:
 
         if(this.fit)
           this._fitSize()
+        else if(this.scene.unit == 'mm')
+          this.scene.scale = {
+            x: this.scene.PPM,
+            y: this.scene.PPM
+          }
+        else
+          this.scene.scale = {
+            x: 1,
+            y: 1
+          }
 
         this.variables = model.variables
 
@@ -199,7 +209,7 @@ Example:
         if(!this.scene)
           return
 
-        var unit = this.scene.unit == 'mm' ? this.scene.ppm : 1
+        var unit = this.scene.unit == 'mm' ? this.scene.PPM : 1
         var width = this.model.width * unit, height = this.model.height * unit
         var vw = this.offsetWidth, vh = this.offsetHeight
 
