@@ -112,7 +112,7 @@ Example:
       attached: function() {
         this.async(this.notifyResize, 1);
       },
-      
+
       detached: function() {
         if(this.scene && this.disposeWhenDetached)
           this.scene.dispose()
@@ -163,8 +163,8 @@ Example:
           this._fitSize()
         else if(this.scene.unit == 'mm')
           this.scene.scale = {
-            x: this.scene.PPM,
-            y: this.scene.PPM
+            x: this.scene.PPM / this.scene.DPPX,
+            y: this.scene.PPM / this.scene.DPPX
           }
         else
           this.scene.scale = {
@@ -209,8 +209,7 @@ Example:
         if(!this.scene)
           return
 
-        var unit = this.scene.unit == 'mm' ? this.scene.PPM : 1
-        var width = this.model.width * unit, height = this.model.height * unit
+        var width = this.model.width, height = this.model.height
         var vw = this.offsetWidth, vh = this.offsetHeight
 
         this.scene.scale = {
