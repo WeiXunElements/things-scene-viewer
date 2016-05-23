@@ -199,7 +199,8 @@ Example:
         if(!this.scene)
           return
 
-        var width = this.model.width, height = this.model.height
+        var unit = this.scene.unit == 'mm' ? this.scene.ppm : 1
+        var width = this.model.width * unit, height = this.model.height * unit
         var vw = this.offsetWidth, vh = this.offsetHeight
 
         this.scene.scale = {
