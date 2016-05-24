@@ -159,12 +159,14 @@ Example:
           handlers: handlers
         });
 
+        this.scene.screen = this.screenSize || 13.3
+
         if(this.fit)
           this._fitSize()
         else if(this.scene.unit == 'mm')
           this.scene.scale = {
-            x: this.scene.PPM / this.scene.DPPX,
-            y: this.scene.PPM / this.scene.DPPX
+            x: this.scene.PPM,
+            y: this.scene.PPM
           }
         else
           this.scene.scale = {
