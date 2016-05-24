@@ -72,7 +72,8 @@ Example:
           value: 2
         },
         screenSize: {
-          type: Number
+          type: Number,
+          value: 13.3
         },
         variables: {
           type: Object,
@@ -159,20 +160,24 @@ Example:
           handlers: handlers
         });
 
-        this.scene.screen = this.screenSize || 13.3
+        this.scene.screen = this.screenSize
 
         if(this.fit)
           this._fitSize()
-        else if(this.scene.unit == 'mm')
-          this.scene.scale = {
-            x: this.scene.PPM,
-            y: this.scene.PPM
-          }
-        else
-          this.scene.scale = {
-            x: 1,
-            y: 1
-          }
+        else {
+          let unit = this.scene.unit
+
+          if(unit == 'mm' || unit == 'cm')
+            this.scene.scale = {
+              x: this.scene.PPM,
+              y: this.scene.PPM
+            }
+          else
+            this.scene.scale = {
+              x: 1,
+              y: 1
+            }
+        }
 
         this.variables = model.variables
 
