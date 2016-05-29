@@ -82,9 +82,19 @@ Example:
         values: {
           type: Object
         },
+        /*
+         * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
+         * 
+         * @none 가로, 세로 스케일을 1로 고정하고, {0, 0}좌표로 translate시킨다.
+         * @both 캔바스에 모델을 꼭 채우도록 가로, 세로 스케일을 조정하고, {0, 0}좌표로 translate시킨다.
+         * @width 캔바스의 폭에 모델의 폭을 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+         * @height 캔바스의 높이에 모델의 높이를 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+         * @center 가로, 세로 스케일을 1로 고정하고 모델이 화면의 중앙에 위치하도록 translate시킨다.
+         * @ratio 모델의 모든 부분이 캔바스에 최대 크기로 표현될 수 있도록 가로, 세로 동일한 스케일로 조정하고, {0, 0}좌표로 translate시킨다.
+         */
         fit: {
-          type: Boolean,
-          value: false
+          type: String,
+          value: 'none'
         },
         selected: {
           type: Array,
@@ -126,8 +136,8 @@ Example:
       _onIronResize: function(e) {
         if(this.scene) {
           this.scene.resize()
-          if(this.fit)
-            this._fitSize()
+          if(this.fit == 'both')
+            this.adjust()
         }
       },
 
@@ -162,22 +172,7 @@ Example:
 
         this.scene.screen = this.screenSize
 
-        if(this.fit)
-          this._fitSize()
-        else {
-          let unit = this.scene.unit
-
-          if(unit == 'mm' || unit == 'cm')
-            this.scene.scale = {
-              x: this.scene.PPM,
-              y: this.scene.PPM
-            }
-          else
-            this.scene.scale = {
-              x: 1,
-              y: 1
-            }
-        }
+        this.adjust()
 
         this.variables = model.variables
 
@@ -212,16 +207,112 @@ Example:
           this.scene.variable(key, values[key])
       },
 
-      _fitSize: function() {
+      adjust: function() {
         if(!this.scene)
           return
 
+        switch(this.fit) {
+        case 'center':
+          this._fitCenter()
+          break
+        case 'both':
+          this._fitBoth()
+          break
+        case 'width':
+          this._fitWidth()
+          break
+        case 'height':
+          this._fitHeight()
+          break
+        case 'ratio':
+          this._fitRatio()
+          break
+        case 'none':
+        default:
+          this._fitNone()
+          break
+        }
+      },
+
+      _fitNone: function() {
+        var unit = this.scene.unit
+
+        if(unit == 'mm' || unit == 'cm')
+          this.scene.scale = {
+            x: this.scene.PPM,
+            y: this.scene.PPM
+          }
+        else
+          this.scene.scale = {
+            x: 1,
+            y: 1
+          }
+
+        this.scene.translate = {
+          x: 0,
+          y: 0
+        }
+      },
+
+      _fitBoth: function() {
         var width = this.model.width, height = this.model.height
         var vw = this.offsetWidth, vh = this.offsetHeight
 
         this.scene.scale = {
           x: vw / width,
           y: vh / height
+        }
+      },
+
+      _fitCenter: function() {
+        var unit = this.scene.unit
+
+        if(unit == 'mm' || unit == 'cm')
+          this.scene.scale = {
+            x: this.scene.PPM,
+            y: this.scene.PPM
+          }
+        else
+          this.scene.scale = {
+            x: 1,
+            y: 1
+          }
+
+        this.scene.translate = {
+          x: (this.offsetWidth - this.model.width) / 2,
+          y: (this.offsetHeight - this.model.height) / 2
+        }
+      },
+
+      _fitWidth: function() {
+        var scale = this.offsetWidth / this.model.width
+
+        this.scene.scale = {
+          x: scale,
+          y: scale
+        }
+      },
+
+      _fitHeight: function() {
+        var scale = this.offsetHeight / this.model.height
+
+        this.scene.scale = {
+          x: scale,
+          y: scale
+        }
+      },
+
+      _fitRatio: function() {
+        var width = this.model.width, height = this.model.height
+        var vw = this.offsetWidth, vh = this.offsetHeight
+
+        var scaleX = vw / width
+        var scaleY = vh / height
+        var scale = Math.min(scaleX, scaleY)
+
+        this.scene.scale = {
+          x: scale,
+          y: scale
         }
       },
 
