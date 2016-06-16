@@ -136,11 +136,9 @@ Example:
         if(this.scene) {
           this.scene.resize()
 
-          if(this._need_adjust) {
-            this._need_adjust = false
+          if(this.offsetWidth || this.fit == 'both') {
             this.adjust()
-          } else if(this.fit == 'both')
-            this.adjust()
+          }
         }
       },
 
@@ -181,8 +179,6 @@ Example:
          */
         if(this.offsetWidth)
           this.adjust()
-        else
-          this._need_adjust = true
 
         this.variables = model.variables
 
