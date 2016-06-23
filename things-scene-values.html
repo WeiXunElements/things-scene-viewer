@@ -12,7 +12,7 @@ Example:
                            variables="{{variables}}"
                            mode="0">
     </things-scene-viewer>
-    
+
 Example:
 
     <things-scene-values variables-model="[[variables]]"
@@ -40,7 +40,9 @@ Example:
                    always-float-label
                    placeholder="[[item.name]]"
                    data-variable$="[[item.key]]"
-                   value="[[item.value]]">
+                   data-type$=[[item.valueType]]
+                   value="[[item.value]]"
+                   >
       </paper-input>
     </template>
 
@@ -74,10 +76,23 @@ Example:
             input = input.parentElement;
 
           var variable = input.getAttribute('data-variable')
+          var type = input.getAttribute('data-type')
 
           if(typeof(variable) !== 'undefined') {
             var values = {}
-            values[variable] = e.target.value
+
+            var val = e.target.value
+
+            switch (type) {
+              case 'object':
+                val = JSON.parse(val)
+                break;
+              default:
+
+            }
+
+            values[variable] = val
+
             this.values = values
           }
         }
