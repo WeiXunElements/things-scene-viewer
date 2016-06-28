@@ -250,8 +250,8 @@ Example:
 
         if(unit == 'mm' || unit == 'cm')
           this.scene.scale = {
-            x: this.scene.PPM,
-            y: this.scene.PPM
+            x: this.scene.PPM/this.scene.mmScale,
+            y: this.scene.PPM/this.scene.mmScale
           }
         else
           this.scene.scale = {
@@ -280,8 +280,8 @@ Example:
 
         if(unit == 'mm' || unit == 'cm')
           this.scene.scale = {
-            x: this.scene.PPM,
-            y: this.scene.PPM
+            x: this.scene.PPM/this.scene.mmScale,
+            y: this.scene.PPM/this.scene.mmScale
           }
         else
           this.scene.scale = {
