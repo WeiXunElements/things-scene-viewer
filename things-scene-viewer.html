@@ -102,6 +102,9 @@ Example:
         disposeWhenDetached: {
           type: Boolean,
           value: true
+        },
+        baseUrl: {
+          type: String
         }
       },
 
@@ -113,7 +116,8 @@ Example:
         "_onModelChanged(model)",
         "_onModeChanged(mode)",
         "_onDisplayChanged(screenSize)",
-        "_onValuesChanged(values)"
+        "_onValuesChanged(values)",
+        "_onBaseUrlChanged(baseUrl)"
       ],
 
       ready: function() {
@@ -342,6 +346,13 @@ Example:
           this.style.cursor = "all-scroll"
         else
           this.style.cursor = "default"
+      },
+
+      _onBaseUrlChanged: function(after, before) {
+        if(!this.scene)
+          return
+
+        this.scene.app.baseUrl = after;
       }
 
     });
