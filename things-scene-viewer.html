@@ -192,6 +192,10 @@ Example:
         this._onModeChanged(this.mode)
         this._onDisplayChanged(this.screenSize)
         this._onBaseUrlChanged(this.baseUrl)
+
+        /* View mode로 시작된 경우에는 초기 변수값을 대입한다. */
+        if(this.mode == 0)
+          this.scene.play();
       },
 
       _onDisplayChanged: function(screenSize) {
