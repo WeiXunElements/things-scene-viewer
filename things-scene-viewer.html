@@ -83,7 +83,7 @@ Example:
         },
         /*
          * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
-         * 
+         *
          * @none 가로, 세로 스케일을 1로 고정하고, {0, 0}좌표로 translate시킨다.
          * @both 캔바스에 모델을 꼭 채우도록 가로, 세로 스케일을 조정하고, {0, 0}좌표로 translate시킨다.
          * @width 캔바스의 폭에 모델의 폭을 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
@@ -255,18 +255,13 @@ Example:
       },
 
       _fitNone: function() {
-        var unit = this.scene.unit
+        /* 설정된 단위에 맞춰서, 최초의 scene scale을 설정한다. */
+        var scale = this.scene.unitScale;
 
-        if(unit == 'mm' || unit == 'cm')
-          this.scene.scale = {
-            x: this.scene.PPM/this.scene.mmScale,
-            y: this.scene.PPM/this.scene.mmScale
-          }
-        else
-          this.scene.scale = {
-            x: 1,
-            y: 1
-          }
+        this.scene.scale = {
+          x: scale,
+          y: scale
+        }
 
         this.scene.translate = {
           x: 0,
@@ -285,22 +280,17 @@ Example:
       },
 
       _fitCenter: function() {
-        var unit = this.scene.unit
+        /* 설정된 단위에 맞춰서, 최초의 scene scale을 설정한다. */
+        var scale = this.scene.unitScale;
 
-        if(unit == 'mm' || unit == 'cm')
-          this.scene.scale = {
-            x: this.scene.PPM/this.scene.mmScale,
-            y: this.scene.PPM/this.scene.mmScale
-          }
-        else
-          this.scene.scale = {
-            x: 1,
-            y: 1
-          }
+        this.scene.scale = {
+          x: scale,
+          y: scale
+        }
 
         this.scene.translate = {
-          x: Math.max((this.offsetWidth - this.model.width * this.scene.scale.x) / 2, 0),
-          y: Math.max((this.offsetHeight - this.model.height * this.scene.scale.y) / 2, 0)
+          x: Math.max((this.offsetWidth - this.model.width * scale) / 2, 0),
+          y: Math.max((this.offsetHeight - this.model.height * scale) / 2, 0)
         }
       },
 
