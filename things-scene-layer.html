@@ -37,31 +37,36 @@ Example:
 
       properties: {
         type: String,
-        model: {
-          type: Object,
-          notify: true
-        }
+        text: String
       },
 
-      attached: function() {
+      getModel: function() {
         var model = {
           type: this.type
         }
 
         model = Array.from(this.querySelectorAll('things-scene-property'))
         .reduce(function(model, property) {
-          var name = property.getAttribute('name')
-          var value = property.getAttribute('value')
+          var value = property.value
 
-          if(name)
-            model[name] = value
+          if(property.name) {
+            switch(property.type) {
+            case 'number':
+              value = Number(value);
+              break;
+            case 'boolean':
+              value = Boolean(value);
+              break;
+            default:
+            }
+
+            model[property.name] = value
+          }
 
           return model
         }, model)
 
-        model.__host__ = this
-
-        this.model = model
+        return model;
       }
 
     });
