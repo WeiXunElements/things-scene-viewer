@@ -160,7 +160,8 @@ Example:
 
         var layers = Array.from(this.querySelectorAll('things-scene-layer'))
         .map(function(layer) {
-          return layer.model
+          var model = layer.getModel();
+          return model;
         })
 
         var handlers = Array.from(this.querySelectorAll('things-scene-handler'))
