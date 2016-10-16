@@ -120,42 +120,39 @@ Example:
         "_onBaseUrlChanged(baseUrl)"
       ],
 
-      ready: function() {
-      },
-
       attached: function() {
         this.async(this.notifyResize, 1);
       },
 
       detached: function() {
         if(this.scene && this.disposeWhenDetached)
-          this.scene.dispose()
+          this.scene.dispose();
       },
 
       findAll: function(selector) {
-        return this.scene.findAll(selector)
+        return this.scene.findAll(selector);
       },
 
       _onIronResize: function(e) {
         if(this.scene) {
-          this.scene.resize()
+          this.scene.resize();
 
           if(this.offsetWidth || this.fit == 'both') {
-            this.adjust()
+            this._fit();
           }
         }
       },
 
       _onModelChanged: function(model) {
         if(this.scene) {
-          this.scene.off('selected', this._onSelectedChanged, this)
-          this.scene.off('mode', this._onSceneModeChanged, this)
-          this.scene.dispose()
+          this.scene.off('selected', this._onSelectedChanged, this);
+          this.scene.off('mode', this._onSceneModeChanged, this);
+          this.scene.dispose();
         }
 
         if(!model) {
-          this.scene = null
-          return
+          this.scene = null;
+          return;
         }
 
         var layers = Array.from(this.querySelectorAll('things-scene-layer'))
@@ -166,7 +163,7 @@ Example:
 
         var handlers = Array.from(this.querySelectorAll('things-scene-handler'))
         .map(function(handler) {
-          return handler.getAttribute('type')
+          return handler.getAttribute('type');
         })
 
         this.scene = scene.create({
@@ -176,23 +173,23 @@ Example:
           handlers: handlers
         });
 
-        this.scene.screen = this.screenSize
+        this.scene.screen = this.screenSize;
 
         /* 이 컴포넌트의 폭이 값을 가지고 있으면 - 화면상에 자리를 잡고 보여지고 있음을 의미한다.
          * 이 때는 정상적으로 그려주고,
          * 그렇지 않으면, 다음 Resize Handling시에 처리하도록 한다.
          */
         if(this.offsetWidth)
-          this.adjust()
+          this.fit();
 
-        this.variables = model.variables
+        this.variables = model.variables;
 
-        this.scene.on('selected', this._onSelectedChanged, this)
-        this.scene.on('mode', this._onSceneModeChanged, this)
+        this.scene.on('selected', this._onSelectedChanged, this);
+        this.scene.on('mode', this._onSceneModeChanged, this);
 
-        this._onModeChanged(this.mode)
-        this._onDisplayChanged(this.screenSize)
-        this._onBaseUrlChanged(this.baseUrl)
+        this._onModeChanged(this.mode);
+        this._onDisplayChanged(this.screenSize);
+        this._onBaseUrlChanged(this.baseUrl);
 
         /* View mode로 시작된 경우에는 초기 변수값을 대입한다. */
         if(this.mode == 0)
@@ -201,7 +198,7 @@ Example:
 
       _onDisplayChanged: function(screenSize) {
         if(!this.scene)
-          return
+          return;
 
         if(screenSize)
           this.scene.screen = parseFloat(screenSize)
@@ -209,7 +206,7 @@ Example:
 
       _onModeChanged: function(mode) {
         if(!this.scene)
-          return
+          return;
 
         if(this.scene.mode !== parseFloat(mode))
           this.scene.mode = parseFloat(mode)
@@ -217,136 +214,39 @@ Example:
 
       _onValuesChanged: function(values) {
         if(!this.scene || !values)
-          return
+          return;
 
         for(var key in values)
-          this.scene.variable(key, values[key])
+          this.scene.variable(key, values[key]);
       },
 
-      adjust: function() {
+      _fit: function() {
         if(!this.scene)
-          return
+          return;
 
-        if(!this.model.width || !this.model.height) {
-          this._fitNone()
-          return
-        }
-
-        switch(this.fit) {
-        case 'center':
-          this._fitCenter()
-          break
-        case 'both':
-          this._fitBoth()
-          break
-        case 'width':
-          this._fitWidth()
-          break
-        case 'height':
-          this._fitHeight()
-          break
-        case 'ratio':
-          this._fitRatio()
-          break
-        case 'none':
-        default:
-          this._fitNone()
-          break
-        }
-      },
-
-      _fitNone: function() {
-        /* 설정된 단위에 맞춰서, 최초의 scene scale을 설정한다. */
-        var scale = this.scene.unitScale;
-
-        this.scene.scale = {
-          x: scale,
-          y: scale
-        }
-
-        this.scene.translate = {
-          x: 0,
-          y: 0
-        }
-      },
-
-      _fitBoth: function() {
-        var width = this.model.width, height = this.model.height
-        var vw = this.offsetWidth, vh = this.offsetHeight
-
-        this.scene.scale = {
-          x: vw / width,
-          y: vh / height
-        }
-      },
-
-      _fitCenter: function() {
-        /* 설정된 단위에 맞춰서, 최초의 scene scale을 설정한다. */
-        var scale = this.scene.unitScale;
-
-        this.scene.scale = {
-          x: scale,
-          y: scale
-        }
-
-        this.scene.translate = {
-          x: Math.max((this.offsetWidth - this.model.width * scale) / 2, 0),
-          y: Math.max((this.offsetHeight - this.model.height * scale) / 2, 0)
-        }
-      },
-
-      _fitWidth: function() {
-        var scale = this.offsetWidth / this.model.width
-
-        this.scene.scale = {
-          x: scale,
-          y: scale
-        }
-      },
-
-      _fitHeight: function() {
-        var scale = this.offsetHeight / this.model.height
-
-        this.scene.scale = {
-          x: scale,
-          y: scale
-        }
-      },
-
-      _fitRatio: function() {
-        var width = this.model.width, height = this.model.height
-        var vw = this.offsetWidth, vh = this.offsetHeight
-
-        var scaleX = vw / width
-        var scaleY = vh / height
-        var scale = Math.min(scaleX, scaleY)
-
-        this.scene.scale = {
-          x: scale,
-          y: scale
-        }
+        this.scene.fit(this.fit);
       },
 
       _onSelectedChanged: function(after, before) {
-        this.selected = after
+        this.selected = after;
       },
 
       _onSceneModeChanged: function(after, before) {
         if(!this.scene)
-          return
+          return;
 
         if(this.mode != after)
-          this.mode = after
+          this.mode = after;
 
         if(after === 2)
-          this.style.cursor = "all-scroll"
+          this.style.cursor = "all-scroll";
         else
-          this.style.cursor = "default"
+          this.style.cursor = "default";
       },
 
       _onBaseUrlChanged: function(after, before) {
         if(!this.scene)
-          return
+          return;
 
         this.scene.app.baseUrl = after;
       }
