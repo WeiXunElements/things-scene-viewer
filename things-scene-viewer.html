@@ -105,6 +105,10 @@ Example:
         },
         baseUrl: {
           type: String
+        },
+
+        provider: {
+          type: Object
         }
       },
 
@@ -171,7 +175,8 @@ Example:
           model: model,
           layers: layers,
           handlers: handlers,
-          mode: this.mode
+          mode: this.mode,
+          refProvider: this.provider
         });
 
         this.scene.screen = this.screenSize;
