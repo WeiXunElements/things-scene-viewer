@@ -1,0 +1,153 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<link rel="import" href="./things-scene-layer.html">
+<link rel="import" href="./things-scene-handler.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <things-scene-reference></things-scene-reference>
+
+Example:
+
+    <things-scene-reference>
+    </things-scene-reference>
+
+@demo demo/index.html
+@demo demo/index-value.html
+@hero hero.svg
+-->
+
+<dom-module id="things-scene-reference">
+  <template>
+    <style>
+      :host {
+        display: block;
+        @apply(--things-scene-reference);
+      }
+    </style>
+
+    <content></content>
+
+  </template>
+
+  <script src="../things-scene/things-scene-min.js"></script>
+
+  <script>
+    Polymer({
+      is: 'things-scene-reference',
+
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
+      properties: {
+        sceneId: {
+          type: String,
+          observer: "_onSceneIdChanged"
+        },
+        variables: {
+          type: Object,
+          notify: true
+        },
+        values: {
+          type: Object
+        },
+        /*
+         * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
+         *
+         * @none 가로, 세로 스케일을 1로 고정하고, {0, 0}좌표로 translate시킨다.
+         * @both 캔바스에 모델을 꼭 채우도록 가로, 세로 스케일을 조정하고, {0, 0}좌표로 translate시킨다.
+         * @width 캔바스의 폭에 모델의 폭을 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+         * @height 캔바스의 높이에 모델의 높이를 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+         * @center 가로, 세로 스케일을 1로 고정하고 모델이 화면의 중앙에 위치하도록 translate시킨다.
+         * @ratio 모델의 모든 부분이 캔바스에 최대 크기로 표현될 수 있도록 가로, 세로 동일한 스케일로 조정하고, {0, 0}좌표로 translate시킨다.
+         */
+        fit: {
+          type: String,
+          value: 'none'
+        },
+        provider: {
+          type: Object
+        }
+      },
+
+      listeners: {
+        'iron-resize': '_onIronResize',
+      },
+
+      observers: [
+        "_onValuesChanged(values)"
+      ],
+
+      attached: function() {
+        this.async(this.notifyResize, 1);
+      },
+
+      detached: function() {
+        if(this.scene)
+          this.scene.release();
+      },
+
+      _onIronResize: function(e) {
+        if(this.scene) {
+          this.scene.resize();
+
+          if(this.offsetWidth || this.fit == 'both') {
+            this._fit();
+          }
+        }
+      },
+
+      _onSceneIdChanged: function(id) {
+        if(this.scene) {
+          this.scene.release()
+          delete this.scene
+        }
+
+        if(!id)
+          return
+
+        this.scene = this.provider.get(id, true)
+
+        /* 이 컴포넌트의 폭이 값을 가지고 있으면 - 화면상에 자리를 잡고 보여지고 있음을 의미한다.
+         * 이 때는 정상적으로 그려주고,
+         * 그렇지 않으면, 다음 Resize Handling시에 처리하도록 한다.
+         */
+        if(this.offsetWidth)
+          this._fit();
+
+        this.variables = model.variables;
+      },
+
+      _onValuesChanged: function(values) {
+        if(!this.scene || !values)
+          return;
+
+        for(var key in values)
+          this.scene.variable(key, values[key]);
+      },
+
+      _fit: function() {
+        if(!this.scene)
+          return;
+
+        this.scene.fit(this.fit);
+      },
+
+    });
+  </script>
+</dom-module>
