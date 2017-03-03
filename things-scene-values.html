@@ -37,9 +37,9 @@ Example:
 
     <div class="title">[[label]] -variables</div>
     <template is="dom-repeat" items="[[variablesModel]]">
-      <paper-input label="[[item.name]]"
+      <paper-input label="[[item.key]]"
                    always-float-label
-                   placeholder="[[item.name]]"
+                   placeholder="[[item.key]]"
                    data-variable$="[[item.key]]"
                    data-type$=[[item.type]]
                    value="[[item.value]]"
