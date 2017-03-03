@@ -29,8 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     things-scene-viewer {
       display: block;
-      width: 200px;
-      height: 200px;
+      width: 400px;
+      height: 400px;
     }
 
     :root {
@@ -39,23 +39,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       --things-scene-viewer: {
-        background: red        
+        background: red
       }
     }
     </style>
   </head>
   <body unresolved>
 
+    <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
+
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>
-  
+
       <things-scene-viewer id="scene"
                            model="[[model]]"
                            values="[[values]]"
                            variables="{{variables}}"
                            fit="none">
       </things-scene-viewer>
-      
+
       <p>Variables : you can change the value above</p>
       <things-scene-values variables-model="[[variables]]"
                            values="{{values}}">
@@ -73,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           width: 100,
           height: 100,
           components: [{
-            id: 'percent',
+            id: 'progress',
             type: 'progress-circle',
             name: '테스트용 프로그레스',
             cx: 200,
@@ -95,16 +97,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: 'number',
             value: '50',
             mappings: [{
-              target: '#percent',
+              target: '#progress',
               property: 'value',
               rule: 'value'
             }]
-          }]             
-        }        
+          }]
+        }
 
         var model_2 = {
           components: [{
-            id: 'value',
+            id: 'progress',
             type: 'progress-circle',
             name: '테스트용 프로그레스',
             cx: 200,
@@ -125,16 +127,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: 'number',
             value: '49',
             mappings: [{
-              target: '#value',
+              target: '#progress',
               property: 'value',
               rule: 'value'
             }]
-          }]             
+          }]
         }
 
         var current_model = model_1
 
-        app.model = current_model
+        app.model = JSON.parse(JSON.stringify(current_model))
 
         app.$.change.addEventListener('click', function() {
           if(current_model === model_1)
@@ -142,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           else
             current_model = model_1
 
-          app.model = current_model
+          app.model = JSON.parse(JSON.stringify(current_model))
         })
 
       });

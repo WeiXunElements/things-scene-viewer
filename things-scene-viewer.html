@@ -189,7 +189,7 @@ Example:
         if(this.offsetWidth)
           this._fit();
 
-        this.variables = model.variables;
+        this.variables = model.variables || this.scene.variables;
 
         this.scene.on('selected', this._onSelectedChanged, this);
         this.scene.on('mode', this._onSceneModeChanged, this);
@@ -197,9 +197,6 @@ Example:
         this._onModeChanged(this.mode);
         this._onDisplayChanged(this.screenSize);
         this._onBaseUrlChanged(this.baseUrl);
-
-        /* 초기 변수값을 적용한다. */
-        // this.scene.play();
       },
 
       _onDisplayChanged: function(screenSize) {
