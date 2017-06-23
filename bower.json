@@ -4,14 +4,14 @@
   "authors": [
     "Hatio Lab. <heartyoh@hatiolab.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "An polymer element for things-scene viewer.",
   "keywords": [
     "web-component",
     "polymer",
     "seed"
   ],
   "main": "things-scene-viewer.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
+  "license": "http://things-scene.hatiolab.com/EULA",
   "homepage": "https://github.com/ThingsElements/things-scene-viewer",
   "ignore": [
     "/.*",
