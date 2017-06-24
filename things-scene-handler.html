@@ -7,28 +7,30 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
 
 <link rel="import" href="./things-scene-property.html">
 
-<!--
-An element providing a solution to no problem in particular.
-
-Example:
-
-    <things-scene-viewer>
-      <things-scene-layer type="shift-layer"/>
-      <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
-    </things-scene-viewer>
-
-@demo demo/index.html
-@hero hero.svg
--->
-
 <dom-module id="things-scene-handler">
   <template>
     <content select="things-scene-property"></content>
   </template>
 
   <script>
+    /**
+     * `things-scene-handler`
+     * Polymer component to add handler to the things-scene-viewer.
+     * 
+     * Example:
+     * <things-scene-viewer>
+     *   <things-scene-handler type="editor"/>
+     * </things-scene-viewer>
+     * 
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     * @hero hero.svg
+     */
     class ThingsSceneHandler extends Polymer.Element {
+
       static get is() { return 'things-scene-handler'; }
+      
       static get properties() {
         return {
           type: String,
@@ -39,7 +41,7 @@ Example:
         }
       }
 
-      attached() {
+      connectedCallback() {
         var model = {
           type: this.type
         }

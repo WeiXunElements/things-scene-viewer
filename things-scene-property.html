@@ -5,27 +5,29 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
 
 <link rel="import" href="../polymer/polymer-element.html">
 
-<!--
-An element providing a solution to no problem in particular.
-
-Example:
-
-    <things-scene-viewer>
-      <things-scene-layer type="abc-layer">
-        <things-scene-property name="key" value="value"></things-scene-property>
-      </things-scene-layer>
-    </things-scene-viewer>
-
-@demo demo/index.html
-@hero hero.svg
--->
-
 <dom-module id="things-scene-property">
   <template>
   </template>
 
   <script>
+    /**
+     * `things-scene-property`
+     * Polymer component to add property to the things-scene-layer component.
+     * 
+     * Example:
+     * <things-scene-viewer>
+     *   <things-scene-layer type="abc-layer">
+     *     <things-scene-property name="key" value="value"></things-scene-property>
+     *   </things-scene-layer>
+     * </things-scene-viewer>
+     * 
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     * @hero hero.svg
+     */
     class ThingsSceneProperty extends Polymer.Element {
+
       static get is() { return 'things-scene-property'; }
 
       static get properties() {

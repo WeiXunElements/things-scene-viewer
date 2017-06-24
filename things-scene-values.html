@@ -6,28 +6,6 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-input/paper-input.html">
 
-<!--
-An element providing a solution to no problem in particular.
-
-Example:
-
-    <things-scene-viewer id="scene"
-                           model="[[model]]"
-                           values="[[values]]"
-                           variables="{{variables}}"
-                           mode="0">
-    </things-scene-viewer>
-
-Example:
-
-    <things-scene-values variables-model="[[variables]]"
-                         values="{{values}}">
-    </things-scene-values>
-
-@demo demo/index-values.html
-@hero hero.svg
--->
-
 <dom-module id="things-scene-values">
   <template>
     <style>
@@ -55,8 +33,25 @@ Example:
   </template>
 
   <script>
+    /**
+     * `things-scene-values`
+     * Polymer component to build form for setting variables automatically.
+     * 
+     * Example:
+     * <things-scene-values 
+     *   variables-model="[[variables]]"
+     *   values="{{values}}">
+     * </things-scene-values>
+     * 
+     * @customElement
+     * @polymer
+     * @demo demo/index-values.html
+     * @hero hero.svg
+     */
     class ThingsSceneValue extends Polymer.Element {
+
       static get is() { return 'things-scene-values'; }
+      
       static get properties() {
         return {
           values: {
@@ -65,10 +60,23 @@ Example:
           }
         }
       }
-      static get listeners() {
-        return {
-          'change': '_onValueChanged'
-        }
+
+      constructor() {
+        super();
+
+        this._boundListener = this._onValueChanged.bind(this);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.addEventListener('change', this._boundListener);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        this.removeEventListener('change', this._boundListener);
       }
 
       _onValueChanged(e) {
