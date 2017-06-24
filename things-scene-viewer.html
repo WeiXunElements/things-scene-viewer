@@ -173,7 +173,7 @@ Example:
 
         this.scene = scene.create({
           target: this,
-          model: model,
+          model: JSON.parse(JSON.stringify(model)),
           layers: layers,
           handlers: handlers,
           mode: this.mode,
