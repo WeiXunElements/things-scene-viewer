@@ -1,37 +1,14 @@
 <!--
 @license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Copyright (c) 2017, HatioLab Inc. All right reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <link rel="import" href="./things-scene-layer.html">
 <link rel="import" href="./things-scene-handler.html">
-
-<!--
-An element providing a solution to no problem in particular.
-
-Example:
-
-    <things-scene-viewer></things-scene-viewer>
-
-Example:
-
-    <things-scene-viewer>
-      <things-scene-layer type="shift-layer"/>
-      <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
-    </things-scene-viewer>
-
-@demo demo/index.html
-@demo demo/index-value.html
-@hero hero.svg
--->
 
 <dom-module id="things-scene-viewer">
   <template>
@@ -41,104 +18,139 @@ Example:
         @apply(--things-scene-viewer);
         background-color: #fff;
       }
+
+      #canvas {
+        width: 100%;
+        height: 100%;
+      }
     </style>
 
     <content></content>
+    <div id="canvas"></div>
 
   </template>
 
   <script src="../things-scene-core/things-scene-min.js"></script>
 
   <script>
-    Polymer({
-      is: 'things-scene-viewer',
+    /**
+     * `things-scene-viewer`
+     * An element providing a solution to no problem in particular.
+     * 
+     * Example:
+     * <things-scene-viewer></things-scene-viewer>
+     * 
+     * Example:
+     * <things-scene-viewer>
+     *   <things-scene-layer type="shift-layer"/>
+     *   <things-scene-layer type="confidential-overlay" model="[[confidential]]"/>
+     * </things-scene-viewer>
+     * 
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     * @demo demo/index-value.html
+     */
+    class ThingsSceneViewer extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+      static get is() { return 'things-scene-viewer'; }
+  
+      static get properties() {
+        return {
+          scene: {
+            type: Object,
+            notify: true
+          },
+          model: {
+            type: Object
+          },
+          mode: {
+            /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
+            type: Number,
+            notify: true,
+            value: 2
+          },
+          screenSize: {
+            type: Number,
+            value: 13.3
+          },
+          variables: {
+            type: Object,
+            notify: true
+          },
+          values: {
+            type: Object
+          },
+          /*
+          * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
+          *
+          * @none 가로, 세로 스케일을 1로 고정하고, {0, 0}좌표로 translate시킨다.
+          * @both 캔바스에 모델을 꼭 채우도록 가로, 세로 스케일을 조정하고, {0, 0}좌표로 translate시킨다.
+          * @width 캔바스의 폭에 모델의 폭을 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+          * @height 캔바스의 높이에 모델의 높이를 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
+          * @center 가로, 세로 스케일을 1로 고정하고 모델이 화면의 중앙에 위치하도록 translate시킨다.
+          * @ratio 모델의 모든 부분이 캔바스에 최대 크기로 표현될 수 있도록 가로, 세로 동일한 스케일로 조정하고, {0, 0}좌표로 translate시킨다.
+          */
+          fit: {
+            type: String,
+            value: 'none'
+          },
+          selected: {
+            type: Array,
+            notify: true
+          },
+          disposeWhenDetached: {
+            type: Boolean,
+            value: true
+          },
+          baseUrl: {
+            type: String
+          },
 
-      behaviors: [
-        Polymer.IronResizableBehavior
-      ],
-
-      properties: {
-        scene: {
-          type: Object,
-          notify: true
-        },
-        model: {
-          type: Object
-        },
-        mode: {
-          /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
-          type: Number,
-          notify: true,
-          value: 2
-        },
-        screenSize: {
-          type: Number,
-          value: 13.3
-        },
-        variables: {
-          type: Object,
-          notify: true
-        },
-        values: {
-          type: Object
-        },
-        /*
-         * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
-         *
-         * @none 가로, 세로 스케일을 1로 고정하고, {0, 0}좌표로 translate시킨다.
-         * @both 캔바스에 모델을 꼭 채우도록 가로, 세로 스케일을 조정하고, {0, 0}좌표로 translate시킨다.
-         * @width 캔바스의 폭에 모델의 폭을 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
-         * @height 캔바스의 높이에 모델의 높이를 일치하도록 가로, 세로 스케일을 동일하게 조정하고, {0, 0}좌표로 translate시킨다.
-         * @center 가로, 세로 스케일을 1로 고정하고 모델이 화면의 중앙에 위치하도록 translate시킨다.
-         * @ratio 모델의 모든 부분이 캔바스에 최대 크기로 표현될 수 있도록 가로, 세로 동일한 스케일로 조정하고, {0, 0}좌표로 translate시킨다.
-         */
-        fit: {
-          type: String,
-          value: 'none'
-        },
-        selected: {
-          type: Array,
-          notify: true
-        },
-        disposeWhenDetached: {
-          type: Boolean,
-          value: true
-        },
-        baseUrl: {
-          type: String
-        },
-
-        provider: {
-          type: Object
+          provider: {
+            type: Object
+          }
         }
-      },
+      }
+  
+      static get observers() {
+        return [
+          "_onModelChanged(model)",
+          "_onModeChanged(mode)",
+          "_onDisplayChanged(screenSize)",
+          "_onValuesChanged(values)",
+          "_onBaseUrlChanged(baseUrl)"
+        ]
+      }
+      
+      constructor() {
+        super();
 
-      listeners: {
-        'iron-resize': '_onIronResize',
-      },
+        this._boundResizer = this._onIronResize.bind(this);
+      }
 
-      observers: [
-        "_onModelChanged(model)",
-        "_onModeChanged(mode)",
-        "_onDisplayChanged(screenSize)",
-        "_onValuesChanged(values)",
-        "_onBaseUrlChanged(baseUrl)"
-      ],
+      connectedCallback() {
+        super.connectedCallback();
 
-      attached: function() {
-        this.async(this.notifyResize, 1);
-      },
+        this.addEventListener('iron-resize', this._boundResizer);
+      }
 
-      detached: function() {
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        this.removeEventListener('iron-resize', this._boundResizer);
+
         if(this.scene && this.disposeWhenDetached)
           this.scene.dispose();
-      },
+      }
 
-      findAll: function(selector) {
+      /**
+       * @deprecated
+       */
+      findAll(selector) {
         return this.scene.findAll(selector);
-      },
+      }
 
-      _onIronResize: function(e) {
+      _onIronResize(e) {
         if(this.scene) {
           this.scene.resize();
 
@@ -146,9 +158,10 @@ Example:
             this._fit();
           }
         }
-      },
+      }
 
-      _onModelChanged: function(model) {
+      _onModelChanged(model) {
+
         if(this.scene) {
           this.scene.off('selected', this._onSelectedChanged, this);
           this.scene.off('mode', this._onSceneModeChanged, this);
@@ -172,7 +185,7 @@ Example:
         })
 
         this.scene = scene.create({
-          target: this,
+          target: this.$.canvas,
           model: JSON.parse(JSON.stringify(model)),
           layers: layers,
           handlers: handlers,
@@ -197,44 +210,44 @@ Example:
         this._onModeChanged(this.mode);
         this._onDisplayChanged(this.screenSize);
         this._onBaseUrlChanged(this.baseUrl);
-      },
+      }
 
-      _onDisplayChanged: function(screenSize) {
+      _onDisplayChanged(screenSize) {
         if(!this.scene)
           return;
 
         if(screenSize)
           this.scene.screen = parseFloat(screenSize)
-      },
+      }
 
-      _onModeChanged: function(mode) {
+      _onModeChanged(mode) {
         if(!this.scene)
           return;
 
         if(this.scene.mode !== parseFloat(mode))
           this.scene.mode = parseFloat(mode)
-      },
+      }
 
-      _onValuesChanged: function(values) {
+      _onValuesChanged(values) {
         if(!this.scene || !values)
           return;
 
         for(var key in values)
           this.scene.variable(key, values[key]);
-      },
+      }
 
-      _fit: function() {
+      _fit() {
         if(!this.scene)
           return;
 
         this.scene.fit(this.fit);
-      },
+      }
 
-      _onSelectedChanged: function(after, before) {
+      _onSelectedChanged(after, before) {
         this.selected = after;
-      },
+      }
 
-      _onSceneModeChanged: function(after, before) {
+      _onSceneModeChanged(after, before) {
         if(!this.scene)
           return;
 
@@ -245,15 +258,16 @@ Example:
           this.style.cursor = "all-scroll";
         else
           this.style.cursor = "default";
-      },
+      }
 
-      _onBaseUrlChanged: function(after, before) {
+      _onBaseUrlChanged(after, before) {
         if(!this.scene)
           return;
 
         this.scene.app.baseUrl = after;
       }
+    }
 
-    });
+    window.customElements.define(ThingsSceneViewer.is, ThingsSceneViewer);
   </script>
 </dom-module>

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017, HatioLab Inc. All right reserved.
+ */
+
 (function() {
   var ConfidentialOverlay = function(model, context) {
     if(!model.text)

@@ -1,4 +1,9 @@
-<link rel="import" href="../polymer/polymer.html">
+<!--
+@license
+Copyright (c) 2017, HatioLab Inc. All right reserved.
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-input/paper-input.html">
 
 <!--
@@ -50,51 +55,51 @@ Example:
   </template>
 
   <script>
-    (function() {
-      'use strict';
-
-      Polymer({
-        is: 'things-scene-values',
-
-        properties: {
+    class ThingsSceneValue extends Polymer.Element {
+      static get is() { return 'things-scene-values'; }
+      static get properties() {
+        return {
           values: {
             type: Object,
             notify: true
           }
-        },
-
-        listeners: {
-          'change': '_onValueChanged'
-        },
-
-        _onValueChanged: function(e) {
-          var input = e.target;
-
-          while (!input.hasAttribute('data-variable') && input !== document.body)
-            input = input.parentElement;
-
-          var variable = input.getAttribute('data-variable')
-          var type = input.getAttribute('data-type')
-
-          if(typeof(variable) !== 'undefined') {
-            var values = {}
-
-            var val = e.target.value
-
-            switch (type) {
-              case 'object':
-                val = JSON.parse(val)
-                break;
-              default:
-
-            }
-
-            values[variable] = val
-
-            this.values = values
-          }
         }
-      });
-    })();
+      }
+      static get listeners() {
+        return {
+          'change': '_onValueChanged'
+        }
+      }
+
+      _onValueChanged(e) {
+        var input = e.target;
+
+        while (!input.hasAttribute('data-variable') && input !== document.body)
+          input = input.parentElement;
+
+        var variable = input.getAttribute('data-variable')
+        var type = input.getAttribute('data-type')
+
+        if(typeof(variable) !== 'undefined') {
+          var values = {}
+
+          var val = e.target.value
+
+          switch (type) {
+            case 'object':
+              val = JSON.parse(val)
+              break;
+            default:
+
+          }
+
+          values[variable] = val
+
+          this.values = values
+        }
+      }
+    }
+
+    window.customElements.define(ThingsSceneValue.is, ThingsSceneValue);
   </script>
 </dom-module>
