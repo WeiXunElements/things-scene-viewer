@@ -18,9 +18,15 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
         @apply(--things-scene-viewer);
         background-color: #fff;
       }
+
+      #canvas {
+        width: 100%;
+        height: 100%;
+      }
     </style>
 
     <content></content>
+    <div id="canvas"></div>
 
   </template>
 
@@ -45,14 +51,8 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
      * @demo demo/index.html
      * @demo demo/index-value.html
      */
-    class ThingsSceneViewer extends Polymer.Element {
+    class ThingsSceneViewer extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
       static get is() { return 'things-scene-viewer'; }
-  
-      static get behaviors() {
-        return [
-          Polymer.IronResizableBehavior
-        ]
-      }
   
       static get properties() {
         return {
@@ -112,12 +112,6 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
         }
       }
   
-      static get listeners() {
-        return {
-          'iron-resize': '_onIronResize',
-        }
-      }
-
       static get observers() {
         return [
           "_onModelChanged(model)",
@@ -127,16 +121,31 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
           "_onBaseUrlChanged(baseUrl)"
         ]
       }
+      
+      constructor() {
+        super();
 
-      attached() {
-        this.async(this.notifyResize, 1);
+        this._boundResizer = this._onIronResize.bind(this);
       }
 
-      detached() {
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.addEventListener('iron-resize', this._boundResizer);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        this.removeEventListener('iron-resize', this._boundResizer);
+
         if(this.scene && this.disposeWhenDetached)
           this.scene.dispose();
       }
 
+      /**
+       * @deprecated
+       */
       findAll(selector) {
         return this.scene.findAll(selector);
       }
@@ -152,6 +161,7 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
       }
 
       _onModelChanged(model) {
+
         if(this.scene) {
           this.scene.off('selected', this._onSelectedChanged, this);
           this.scene.off('mode', this._onSceneModeChanged, this);
@@ -175,7 +185,7 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
         })
 
         this.scene = scene.create({
-          target: this,
+          target: this.$.canvas,
           model: model,
           layers: layers,
           handlers: handlers,
