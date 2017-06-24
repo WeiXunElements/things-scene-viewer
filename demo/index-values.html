@@ -9,7 +9,11 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>things-scene-viewer Demo</title>
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 
     <link rel="import" href="../things-scene-viewer.html">
     <link rel="import" href="../things-scene-values.html">
@@ -43,6 +47,27 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
   <body unresolved>
 
     <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
+
+    <demo-snippet>
+      <template is="dom-bind" id="app">
+        <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>
+
+        <things-scene-viewer id="scene"
+                            model="[[model]]"
+                            values="[[values]]"
+                            variables="{{variables}}"
+                            fit="none">
+        </things-scene-viewer>
+
+        <p>Variables : you can change the value above</p>
+        <things-scene-values variables-model="[[variables]]"
+                            values="{{values}}">
+        </things-scene-values>
+
+        <button id="change">Change Model</button>
+
+      </template>
+    </demo-snippet>
 
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>

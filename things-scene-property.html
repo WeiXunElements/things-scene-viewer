@@ -3,7 +3,7 @@
 Copyright (c) 2017, HatioLab Inc. All right reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -25,15 +25,19 @@ Example:
   </template>
 
   <script>
-    Polymer({
-      is: 'things-scene-property',
+    class ThingsSceneProperty extends Polymer.Element {
+      static get is() { return 'things-scene-property'; }
 
-      properties: {
-        name: String,
-        value: String,
-        type: String
+      static get properties() {
+        return {
+          name: String,
+          value: String,
+          type: String
+        }
       }
 
-    });
+    }
+
+    window.customElements.define(ThingsSceneProperty.is, ThingsSceneProperty);
   </script>
 </dom-module>

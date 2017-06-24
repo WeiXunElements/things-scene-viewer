@@ -3,7 +3,7 @@
 Copyright (c) 2017, HatioLab Inc. All right reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <link rel="import" href="./things-scene-property.html">
 
@@ -27,15 +27,17 @@ Example:
   </template>
 
   <script>
-    Polymer({
-      is: 'things-scene-layer',
+    class ThingsSceneLayer extends Polymer.Element {
+      static get is() { return 'things-scene-layer'; }
 
-      properties: {
-        type: String,
-        text: String
-      },
+      static get properties() {
+        return {
+          type: String,
+          text: String
+        }
+      }
 
-      getModel: function() {
+      getModel() {
         var model = {
           type: this.type
         }
@@ -64,6 +66,8 @@ Example:
         return model;
       }
 
-    });
+    }
+
+    window.customElements.define(ThingsSceneLayer.is, ThingsSceneLayer);
   </script>
 </dom-module>

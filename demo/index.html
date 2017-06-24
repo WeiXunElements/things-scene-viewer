@@ -9,7 +9,11 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>things-scene-viewer Demo</title>
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 
     <link rel="import" href="../things-scene-viewer.html">
     
@@ -51,6 +55,22 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
     <link rel="import" href="layers/confidential-overlay.html">
     <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
 
+    <demo-snippet>
+      <template is="dom-bind" id="app">
+        <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
+        
+        <things-scene-viewer id='scene' model='[[model]]' fit='center'>
+          <things-scene-layer type="shift-layer"></things-scene-layer>
+          <things-scene-layer type="confidential-overlay">
+            <things-scene-property name="text" value="[[confidential]]"></things-scene-property>
+          </things-scene-layer>
+        </things-scene-viewer>
+
+        <button id="change">Change Value</button>
+
+      </template>
+    </demo-snippet>
+
     <template is="dom-bind" id="app">
       <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
       
@@ -66,10 +86,16 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
     </template>
 
     <script>
-      window.addEventListener('WebComponentsReady', function(e) {
+      // window.addEventListener('WebComponentsReady', function(e) {
         var app = document.querySelector('#app')
 
-        app.$.change.addEventListener('click', function() {
+        console.log('app', app, Polymer.dom(app).querySelector('#change'));
+
+        // app.$.change.addEventListener('click', function() {
+        //   var viewer = app.$.scene
+        //   viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
+        // })
+        app.addEventListener('click', function() {
           var viewer = app.$.scene
           viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
         })
@@ -97,7 +123,7 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
           }]          
         }
 
-      });
+      // });
     </script>
 
   </body>
