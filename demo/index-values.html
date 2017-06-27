@@ -8,6 +8,45 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    
+    <title>things-scene-viewer Demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../things-scene-viewer.html">
+    
+    <custom-style>
+      <style include="demo-pages-shared-styles">
+
+      @font-face {
+        font-family: "Bitstream Vera Serif Bold";
+        src: url("fonts/VeraSeBd.ttf");
+      }
+
+      things-scene-viewer {
+        display: block;
+        width: 400px;
+        height: 400px;
+        border-style: solid;
+        border-width: 1px;
+      }
+
+      </style>
+    </custom-style>
+
+<!--
+@license
+Copyright (c) 2017, HatioLab Inc. All right reserved.
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>things-scene-viewer Demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
@@ -46,12 +85,12 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
   </head>
   <body unresolved>
 
-    <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
+    <link rel="import" href="../../things-scene-progressbar/things-scene-progressbar.html">
 
-    <demo-snippet>
-      <template is="dom-bind" id="app">
-        <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>
+    <h3>An example of <code>&lt;things-scene-value&gt;</code>:</h3>
 
+    <demo-snippet><template>
+      <dom-bind><template>
         <things-scene-viewer id="scene"
                             model="[[model]]"
                             values="[[values]]"
@@ -66,110 +105,71 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
 
         <button id="change">Change Model</button>
 
-      </template>
-    </demo-snippet>
+      </template></dom-bind>
 
-    <template is="dom-bind" id="app">
-      <p>An example of <code>&lt;things-scene-value&gt;</code>:</p>
+      <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+          var app = document.querySelector('dom-bind')
 
-      <things-scene-viewer id="scene"
-                           model="[[model]]"
-                           values="[[values]]"
-                           variables="{{variables}}"
-                           fit="none">
-      </things-scene-viewer>
-
-      <p>Variables : you can change the value above</p>
-      <things-scene-values variables-model="[[variables]]"
-                           values="{{values}}">
-      </things-scene-values>
-
-      <button id="change">Change Model</button>
-
-    </template>
-
-    <script>
-      window.addEventListener('WebComponentsReady', function(e) {
-        var app = document.querySelector('#app')
-
-        var model_1 = {
-          width: 100,
-          height: 100,
-          components: [{
-            id: 'progress',
-            type: 'progress-circle',
-            name: '테스트용 프로그레스',
-            cx: 200,
-            cy: 200,
-            rx: 150,
-            ry: 150,
-            fontSize: 80,
-            strokeStyle: '#552555',
-            fontColor: '#FF0000',
-            lineWidth: 30,
-            value: 75,
-            alpha: 0.8,
-            text: "#{value}%",
-            fontFamily: 'Bitstream Vera Serif Bold'
-          }],
-          variables: [{
-            key: 'percent',
-            name: 'Percent',
-            type: 'number',
-            value: '50',
-            mappings: [{
-              target: '#progress',
-              property: 'value',
-              rule: 'value'
+          var model_1 = {
+            width: 100,
+            height: 100,
+            components: [{
+              id: 'progress',
+              type: 'progress-circle',
+              name: '테스트용 프로그레스',
+              cx: 200,
+              cy: 200,
+              rx: 150,
+              ry: 150,
+              fontSize: 80,
+              strokeStyle: '#552555',
+              fontColor: '#FF0000',
+              lineWidth: 30,
+              value: 75,
+              alpha: 0.8,
+              text: "#{value}%",
+              fontFamily: 'Bitstream Vera Serif Bold'
             }]
-          }]
-        }
+          }
 
-        var model_2 = {
-          components: [{
-            id: 'progress',
-            type: 'progress-circle',
-            name: '테스트용 프로그레스',
-            cx: 200,
-            cy: 200,
-            rx: 150,
-            ry: 150,
-            fontSize: 80,
-            strokeStyle: '#552555',
-            fontColor: '#FF0000',
-            lineWidth: 30,
-            value: 90,
-            alpha: 0.8,
-            text: "#{value}"
-          }],
-          variables: [{
-            key: 'value',
-            name: 'Value',
-            type: 'number',
-            value: '49',
-            mappings: [{
-              target: '#progress',
-              property: 'value',
-              rule: 'value'
+          var model_2 = {
+            width: 200,
+            height: 200,
+            components: [{
+              id: 'progress',
+              type: 'progress-circle',
+              name: '테스트용 프로그레스',
+              cx: 200,
+              cy: 200,
+              rx: 150,
+              ry: 150,
+              fontSize: 80,
+              strokeStyle: '#552555',
+              fontColor: '#FF0000',
+              lineWidth: 30,
+              value: 90,
+              alpha: 0.8,
+              text: "#{value}"
             }]
-          }]
-        }
+          }
 
-        var current_model = model_1
+          var current_model = model_1;
 
-        app.model = JSON.parse(JSON.stringify(current_model))
+          app.model = current_model;
 
-        app.$.change.addEventListener('click', function() {
-          if(current_model === model_1)
-            current_model = model_2
-          else
-            current_model = model_1
+          app.$.change.addEventListener('click', function() {
+            if(current_model === model_1)
+              current_model = model_2;
+            else
+              current_model = model_1;
 
-          app.model = JSON.parse(JSON.stringify(current_model))
-        })
+            app.model = current_model;
+          })
 
-      });
-    </script>
+        });
+      </script>
+    </template></demo-snippet>
 
   </body>
 </html>

@@ -8,6 +8,7 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    
     <title>things-scene-viewer Demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
@@ -17,49 +18,37 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
 
     <link rel="import" href="../things-scene-viewer.html">
     
-    <style is="custom-style">
+    <custom-style>
+      <style include="demo-pages-shared-styles">
 
-    @font-face {
-      font-family: "Bitstream Vera Serif Bold";
-      src: url("fonts/VeraSeBd.ttf");
-    }
-
-    things-scene-viewer {
-      display: block;
-      /*width: 400px;*/
-      /*width: 3in;*/
-      /*width: 288px;*/
-      width: 400px;
-      height: 400px;
-      border-style: solid;
-      border-width: 1px;
-    }
-
-    @media print { 
-      /* All your print styles go here */
-      #header, #footer, #nav { display: none !important; } 
+      @font-face {
+        font-family: "Bitstream Vera Serif Bold";
+        src: url("fonts/VeraSeBd.ttf");
+      }
 
       things-scene-viewer {
         display: block;
-        width: 10cm;
-        height: 5cm;
+        width: 400px;
+        height: 400px;
         border-style: solid;
         border-width: 1px;
       }
-    }
 
-    </style>
+      </style>
+    </custom-style>
+
   </head>
   <body unresolved>
 
     <link rel="import" href="layers/confidential-overlay.html">
-    <link rel="import" href="../bower_components/things-scene-progressbar/things-scene-progressbar.html">
+    <link rel="import" href="../../things-scene-progressbar/things-scene-progressbar.html">
 
-    <demo-snippet>
-      <template is="dom-bind" id="app">
-        <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
+    <h3>An example of <code>&lt;things-scene-viewer&gt;</code>:</h3>
+
+    <demo-snippet><template>
+      <dom-bind><template>
         
-        <things-scene-viewer id='scene' model='[[model]]' fit='center'>
+        <things-scene-viewer scene='{{scene}}' model='[[model]]' fit='center'>
           <things-scene-layer type="shift-layer"></things-scene-layer>
           <things-scene-layer type="confidential-overlay">
             <things-scene-property name="text" value="[[confidential]]"></things-scene-property>
@@ -67,64 +56,44 @@ Copyright (c) 2017, HatioLab Inc. All right reserved.
         </things-scene-viewer>
 
         <button id="change">Change Value</button>
+      </template></dom-bind>
 
-      </template>
-    </demo-snippet>
+      <script>
+        window.addEventListener('WebComponentsReady', function(e) {
+          var app = document.querySelector('dom-bind')
 
-    <template is="dom-bind" id="app">
-      <p>An example of <code>&lt;things-scene-viewer&gt;</code>:</p>
-      
-      <things-scene-viewer id='scene' model='[[model]]' fit='center'>
-        <things-scene-layer type="shift-layer"></things-scene-layer>
-        <things-scene-layer type="confidential-overlay">
-          <things-scene-property name="text" value="[[confidential]]"></things-scene-property>
-        </things-scene-layer>
-      </things-scene-viewer>
+          app.$.change.addEventListener('click', function() {
+            app.scene.variable('progress', Math.round(Math.random() * 100));
+          })
 
-      <button id="change">Change Value</button>
+          app.confidential = 'HATIOLAB. CONFIDENTIAL'
 
-    </template>
+          app.model = {
+            width: 200,
+            height: 200,
+            components: [{
+              type: 'progress-circle',
+              id: 'progress',
+              name: '테스트용 프로그레스',
+              cx: 100,
+              cy: 100,
+              rx: 75,
+              ry: 75,
+              fontSize: 40,
+              strokeStyle: '#552555',
+              fontColor: '#FF0000',
+              lineWidth: 20,
+              value: "#{data}",
+              alpha: 0.8,
+              text: "#{data}%",
+              fontFamily: 'Bitstream Vera Serif Bold',
+              data: 75
+            }]          
+          }
 
-    <script>
-      // window.addEventListener('WebComponentsReady', function(e) {
-        var app = document.querySelector('#app')
-
-        console.log('app', app, Polymer.dom(app).querySelector('#change'));
-
-        // app.$.change.addEventListener('click', function() {
-        //   var viewer = app.$.scene
-        //   viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
-        // })
-        app.addEventListener('click', function() {
-          var viewer = app.$.scene
-          viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
-        })
-
-        app.confidential = 'HATIOLAB. CONFIDENTIAL'
-
-        app.model = {
-          width: 200,
-          height: 200,
-          components: [{
-            type: 'progress-circle',
-            name: '테스트용 프로그레스',
-            cx: 100,
-            cy: 100,
-            rx: 75,
-            ry: 75,
-            fontSize: 40,
-            strokeStyle: '#552555',
-            fontColor: '#FF0000',
-            lineWidth: 20,
-            value: 75,
-            alpha: 0.8,
-            text: "#{value}%",
-            fontFamily: 'Bitstream Vera Serif Bold'
-          }]          
-        }
-
-      // });
-    </script>
+        });
+      </script>
+    </template></demo-snippet>
 
   </body>
 </html>
