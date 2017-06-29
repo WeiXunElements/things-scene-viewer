@@ -62,4 +62,4 @@ If you'd like to use Yeoman to scaffold your element that's possible. The offici
 
 ## License
 
-Copyright 2017 [Hatiolab](http://things-scene.hatiolab.com/EULA/)
+Copyright [Hatiolab](http://things-scene.hatiolab.com/EULA/)
