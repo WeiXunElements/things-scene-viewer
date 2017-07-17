@@ -105,6 +105,16 @@ Example:
 
         provider: {
           type: Object
+        },
+
+        /*
+         * provider에 등록하기위한 name(id)
+         */
+        name: {
+          type: String,
+          value: function() {
+            return 'viewer'
+          }
         }
       },
 
@@ -147,7 +157,7 @@ Example:
         if(this.scene) {
           this.scene.off('selected', this._onSelectedChanged, this);
           this.scene.off('mode', this._onSceneModeChanged, this);
-          this.scene.dispose();
+          this.provider ? this.scene.release() : this.scene.dispose();
         }
 
         if(!model) {
@@ -174,6 +184,10 @@ Example:
           mode: this.mode,
           refProvider: this.provider
         });
+
+        if(this.provider) {
+          this.provider.add(this.name, this.scene)
+        }
 
         this.scene.screen = this.screenSize;
 
