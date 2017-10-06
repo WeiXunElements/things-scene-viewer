@@ -136,13 +136,23 @@ Example:
 
       detached: function() {
         if(this.scene && this.disposeWhenDetached)
-          this.scene.dispose();
+          this._disposeScene()
       },
 
       findAll: function(selector) {
         return this.scene.findAll(selector);
       },
 
+      _disposeScene: function() {
+        if(this.scene) {
+          this.scene.off('selected', this._onSelectedChanged, this);
+          this.scene.off('mode', this._onSceneModeChanged, this);
+          this.provider ? this.scene.release() : this.scene.dispose();
+          this.scene = null;
+          this.selected = [];
+        }
+      },
+      
       _onIronResize: function(e) {
         if(this.scene) {
           this.scene.resize();
@@ -154,16 +164,10 @@ Example:
       },
 
       _onModelChanged: function(model) {
-        if(this.scene) {
-          this.scene.off('selected', this._onSelectedChanged, this);
-          this.scene.off('mode', this._onSceneModeChanged, this);
-          this.provider ? this.scene.release() : this.scene.dispose();
-        }
+        this._disposeScene();
 
-        if(!model) {
-          this.scene = null;
+        if(!model)
           return;
-        }
 
         var layers = Array.from(this.querySelectorAll('things-scene-layer'))
         .map(function(layer) {

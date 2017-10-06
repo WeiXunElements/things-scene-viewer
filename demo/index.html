@@ -62,7 +62,9 @@ Copyright © HatioLab Inc. All rights reserved.
       </things-scene-viewer>
 
       <button id="change">Change Value</button>
-
+      <button id="dispose">Dispose</button>
+      <button id="create">Create</button>
+      
     </template>
 
     <script>
@@ -72,6 +74,35 @@ Copyright © HatioLab Inc. All rights reserved.
         app.$.change.addEventListener('click', function() {
           var viewer = app.$.scene
           viewer.findAll('progress-circle')[0].set('value', Math.round(Math.random() * 100))
+        })
+
+        app.$.dispose.addEventListener('click', function() {
+          var viewer = app.$.scene
+          app.model = null
+        })
+
+        app.$.create.addEventListener('click', function() {
+          var viewer = app.$.scene
+          app.model = {
+            width: 200,
+            height: 200,
+            components: [{
+              type: 'progress-circle',
+              name: '테스트용 프로그레스',
+              cx: 100,
+              cy: 100,
+              rx: 75,
+              ry: 75,
+              fontSize: 40,
+              strokeStyle: '#552555',
+              fontColor: '#FF0000',
+              lineWidth: 20,
+              value: 75,
+              alpha: 0.8,
+              text: "#{value}%",
+              fontFamily: 'Bitstream Vera Serif Bold'
+            }]          
+          }
         })
 
         app.confidential = 'HATIOLAB. CONFIDENTIAL'
