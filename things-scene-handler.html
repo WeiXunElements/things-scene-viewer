@@ -1,11 +1,11 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html" />
 
-<link rel="import" href="./things-scene-property.html">
+<link rel="import" href="./things-scene-property.html" />
 
 <!--
 An element providing a solution to no problem in particular.
@@ -34,31 +34,28 @@ Example:
         type: String,
         model: {
           type: Object,
-          notify: true
-        }
+          notify: true,
+        },
       },
 
-      attached: function() {
+      attached: function () {
         var model = {
-          type: this.type
-        }
+          type: this.type,
+        };
 
-        model = Array.from(this.querySelectorAll('things-scene-property'))
-        .reduce(function(model, property) {
-          var name = property.getAttribute('name')
-          var value = property.getAttribute('value')
+        model = Array.from(this.querySelectorAll('things-scene-property')).reduce(function (model, property) {
+          var name = property.getAttribute('name');
+          var value = property.getAttribute('value');
 
-          if(name)
-            model[name] = value
+          if (name) model[name] = value;
 
-          return model
-        }, model)
+          return model;
+        }, model);
 
-        model.__host__ = this
+        model.__host__ = this;
 
-        this.model = model
-      }
-
+        this.model = model;
+      },
     });
   </script>
 </dom-module>

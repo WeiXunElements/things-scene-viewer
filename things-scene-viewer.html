@@ -1,13 +1,13 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html" />
 
-<link rel="import" href="./things-scene-layer.html">
-<link rel="import" href="./things-scene-handler.html">
+<link rel="import" href="./things-scene-layer.html" />
+<link rel="import" href="./things-scene-handler.html" />
 
 <!--
 An element providing a solution to no problem in particular.
@@ -33,13 +33,12 @@ Example:
     <style>
       :host {
         display: block;
-        @apply(--things-scene-viewer);
+        @apply (--things-scene-viewer);
         background-color: #fff;
       }
     </style>
 
     <content></content>
-
   </template>
 
   <script src="../things-scene-core/things-scene-min.js"></script>
@@ -48,34 +47,32 @@ Example:
     Polymer({
       is: 'things-scene-viewer',
 
-      behaviors: [
-        Polymer.IronResizableBehavior
-      ],
+      behaviors: [Polymer.IronResizableBehavior],
 
       properties: {
         scene: {
           type: Object,
-          notify: true
+          notify: true,
         },
         model: {
-          type: Object
+          type: Object,
         },
         mode: {
           /* mode 0 : view mode, mode 1 : edit mode, mode 2 : shift mode */
           type: Number,
           notify: true,
-          value: 2
+          value: 2,
         },
         screenSize: {
           type: Number,
-          value: 13.3
+          value: 13.3,
         },
         variables: {
           type: Object,
-          notify: true
+          notify: true,
         },
         values: {
-          type: Object
+          type: Object,
         },
         /*
          * 캔바스에 모델을 어떻게 적절하게 보여줄 것인지를 설정한다.
@@ -89,22 +86,22 @@ Example:
          */
         fit: {
           type: String,
-          value: 'none'
+          value: 'none',
         },
         selected: {
           type: Array,
-          notify: true
+          notify: true,
         },
         disposeWhenDetached: {
           type: Boolean,
-          value: true
+          value: true,
         },
         baseUrl: {
-          type: String
+          type: String,
         },
 
         provider: {
-          type: Object
+          type: Object,
         },
 
         /*
@@ -112,10 +109,10 @@ Example:
          */
         name: {
           type: String,
-          value: function() {
-            return 'viewer'
-          }
-        }
+          value: function () {
+            return 'viewer';
+          },
+        },
       },
 
       listeners: {
@@ -123,28 +120,27 @@ Example:
       },
 
       observers: [
-        "_onModelChanged(model)",
-        "_onModeChanged(mode)",
-        "_onDisplayChanged(screenSize)",
-        "_onValuesChanged(values)",
-        "_onBaseUrlChanged(baseUrl)"
+        '_onModelChanged(model)',
+        '_onModeChanged(mode)',
+        '_onDisplayChanged(screenSize)',
+        '_onValuesChanged(values)',
+        '_onBaseUrlChanged(baseUrl)',
       ],
 
-      attached: function() {
+      attached: function () {
         this.async(this.notifyResize, 1);
       },
 
-      detached: function() {
-        if(this.scene && this.disposeWhenDetached)
-          this._disposeScene()
+      detached: function () {
+        if (this.scene && this.disposeWhenDetached) this._disposeScene();
       },
 
-      findAll: function(selector) {
+      findAll: function (selector) {
         return this.scene.findAll(selector);
       },
 
-      _disposeScene: function() {
-        if(this.scene) {
+      _disposeScene: function () {
+        if (this.scene) {
           this.scene.off('selected', this._onSelectedChanged, this);
           this.scene.off('mode', this._onSceneModeChanged, this);
           this.provider ? this.scene.release() : this.scene.dispose();
@@ -152,33 +148,30 @@ Example:
           this.selected = [];
         }
       },
-      
-      _onIronResize: function(e) {
-        if(this.scene) {
+
+      _onIronResize: function (e) {
+        if (this.scene) {
           this.scene.resize();
 
-          if(this.offsetWidth || this.fit == 'both') {
+          if (this.offsetWidth || this.fit == 'both') {
             this._fit();
           }
         }
       },
 
-      _onModelChanged: function(model) {
+      _onModelChanged: function (model) {
         this._disposeScene();
 
-        if(!model)
-          return;
+        if (!model) return;
 
-        var layers = Array.from(this.querySelectorAll('things-scene-layer'))
-        .map(function(layer) {
+        var layers = Array.from(this.querySelectorAll('things-scene-layer')).map(function (layer) {
           var model = layer.getModel();
           return model;
-        })
+        });
 
-        var handlers = Array.from(this.querySelectorAll('things-scene-handler'))
-        .map(function(handler) {
+        var handlers = Array.from(this.querySelectorAll('things-scene-handler')).map(function (handler) {
           return handler.getAttribute('type');
-        })
+        });
 
         this.scene = scene.create({
           target: this,
@@ -186,11 +179,11 @@ Example:
           layers: layers,
           handlers: handlers,
           mode: this.mode,
-          refProvider: this.provider
+          refProvider: this.provider,
         });
 
-        if(this.provider) {
-          this.provider.add(this.name, this.scene)
+        if (this.provider) {
+          this.provider.add(this.name, this.scene);
         }
 
         this.scene.screen = this.screenSize;
@@ -199,8 +192,7 @@ Example:
          * 이 때는 정상적으로 그려주고,
          * 그렇지 않으면, 다음 Resize Handling시에 처리하도록 한다.
          */
-        if(this.offsetWidth)
-          this._fit();
+        if (this.offsetWidth) this._fit();
 
         this.variables = model.variables || this.scene.variables;
 
@@ -212,61 +204,48 @@ Example:
         this._onBaseUrlChanged(this.baseUrl);
       },
 
-      _onDisplayChanged: function(screenSize) {
-        if(!this.scene)
-          return;
+      _onDisplayChanged: function (screenSize) {
+        if (!this.scene) return;
 
-        if(screenSize)
-          this.scene.screen = parseFloat(screenSize)
+        if (screenSize) this.scene.screen = parseFloat(screenSize);
       },
 
-      _onModeChanged: function(mode) {
-        if(!this.scene)
-          return;
+      _onModeChanged: function (mode) {
+        if (!this.scene) return;
 
-        if(this.scene.mode !== parseFloat(mode))
-          this.scene.mode = parseFloat(mode)
+        if (this.scene.mode !== parseFloat(mode)) this.scene.mode = parseFloat(mode);
       },
 
-      _onValuesChanged: function(values) {
-        if(!this.scene || !values)
-          return;
+      _onValuesChanged: function (values) {
+        if (!this.scene || !values) return;
 
-        for(var key in values)
-          this.scene.variable(key, values[key]);
+        for (var key in values) this.scene.variable(key, values[key]);
       },
 
-      _fit: function() {
-        if(!this.scene)
-          return;
+      _fit: function () {
+        if (!this.scene) return;
 
         this.scene.fit(this.fit);
       },
 
-      _onSelectedChanged: function(after, before) {
+      _onSelectedChanged: function (after, before) {
         this.selected = after;
       },
 
-      _onSceneModeChanged: function(after, before) {
-        if(!this.scene)
-          return;
+      _onSceneModeChanged: function (after, before) {
+        if (!this.scene) return;
 
-        if(this.mode != after)
-          this.mode = after;
+        if (this.mode != after) this.mode = after;
 
-        if(after === 2)
-          this.style.cursor = "all-scroll";
-        else
-          this.style.cursor = "default";
+        if (after === 2) this.style.cursor = 'all-scroll';
+        else this.style.cursor = 'default';
       },
 
-      _onBaseUrlChanged: function(after, before) {
-        if(!this.scene)
-          return;
+      _onBaseUrlChanged: function (after, before) {
+        if (!this.scene) return;
 
         this.scene.app.baseUrl = after;
-      }
-
+      },
     });
   </script>
 </dom-module>

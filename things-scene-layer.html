@@ -1,11 +1,11 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html" />
 
-<link rel="import" href="./things-scene-property.html">
+<link rel="import" href="./things-scene-property.html" />
 
 <!--
 An element providing a solution to no problem in particular.
@@ -32,38 +32,36 @@ Example:
 
       properties: {
         type: String,
-        text: String
+        text: String,
       },
 
-      getModel: function() {
+      getModel: function () {
         var model = {
-          type: this.type
-        }
+          type: this.type,
+        };
 
-        model = Array.from(this.querySelectorAll('things-scene-property'))
-        .reduce(function(model, property) {
-          var value = property.value
+        model = Array.from(this.querySelectorAll('things-scene-property')).reduce(function (model, property) {
+          var value = property.value;
 
-          if(property.name) {
-            switch(property.type) {
-            case 'number':
-              value = Number(value);
-              break;
-            case 'boolean':
-              value = Boolean(value);
-              break;
-            default:
+          if (property.name) {
+            switch (property.type) {
+              case 'number':
+                value = Number(value);
+                break;
+              case 'boolean':
+                value = Boolean(value);
+                break;
+              default:
             }
 
-            model[property.name] = value
+            model[property.name] = value;
           }
 
-          return model
-        }, model)
+          return model;
+        }, model);
 
         return model;
-      }
-
+      },
     });
   </script>
 </dom-module>

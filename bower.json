@@ -1,8 +1,8 @@
 {
   "name": "things-scene-viewer",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "authors": [
-    "Hatio Lab. <heartyoh@hatiolab.com>"
+    "Shenzhen Weixun"
   ],
   "description": "An polymer element for things-scene viewer.",
   "keywords": [
@@ -11,8 +11,6 @@
     "seed"
   ],
   "main": "things-scene-viewer.html",
-  "license": "http://things-scene.hatiolab.com/EULA",
-  "homepage": "https://github.com/ThingsElements/things-scene-viewer",
   "ignore": [
     "/.*",
     "/test/"

@@ -2,7 +2,6 @@
 
 An element providing a starting point for your own reusable Polymer elements.
 
-
 ## Dependencies
 
 Element dependencies are managed via [Bower](http://bower.io/). You can
@@ -13,7 +12,6 @@ install that via:
 Then, go ahead and download the element's dependencies:
 
     bower install
-
 
 ## Playing With Your Element
 
@@ -29,7 +27,6 @@ And you can run it via:
 
 Once running, you can preview your element at
 `http://localhost:8080/components/things-scene-viewer/`, where `things-scene-viewer` is the name of the directory containing it.
-
 
 ## Testing Your Element
 
@@ -55,11 +52,6 @@ Then, you can run your tests on _all_ of your local browsers via:
 
 `wct test/some-file.html` will test only the files you specify.
 
-
 ## Yeoman support
 
 If you'd like to use Yeoman to scaffold your element that's possible. The official [`generator-polymer`](https://github.com/yeoman/generator-polymer) generator has a [`seed`](https://github.com/yeoman/generator-polymer#seed) subgenerator.
-
-## License
-
-Copyright [Hatiolab](http://things-scene.hatiolab.com/EULA/)

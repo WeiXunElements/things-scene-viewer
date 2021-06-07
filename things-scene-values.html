@@ -1,10 +1,10 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../paper-input/paper-input.html" />
 
 <!--
 An element providing a solution to no problem in particular.
@@ -32,30 +32,30 @@ Example:
   <template>
     <style>
       :host {
-        @apply(--things-scene-values);
+        @apply (--things-scene-values);
       }
 
       paper-input {
-        @apply(--things-scene-values-input);
+        @apply (--things-scene-values-input);
       }
     </style>
 
     <div class="title">[[label]] -variables</div>
     <template is="dom-repeat" items="[[variablesModel]]">
-      <paper-input label="[[item.key]]"
-                   always-float-label
-                   placeholder="[[item.key]]"
-                   data-variable$="[[item.key]]"
-                   data-type$=[[item.type]]
-                   value="[[item.value]]"
-                   >
+      <paper-input
+        label="[[item.key]]"
+        always-float-label
+        placeholder="[[item.key]]"
+        data-variable$="[[item.key]]"
+        data-type$="[[item.type]]"
+        value="[[item.value]]"
+      >
       </paper-input>
     </template>
-
   </template>
 
   <script>
-    (function() {
+    (function () {
       'use strict';
 
       Polymer({
@@ -64,41 +64,39 @@ Example:
         properties: {
           values: {
             type: Object,
-            notify: true
-          }
+            notify: true,
+          },
         },
 
         listeners: {
-          'change': '_onValueChanged'
+          change: '_onValueChanged',
         },
 
-        _onValueChanged: function(e) {
+        _onValueChanged: function (e) {
           var input = e.target;
 
-          while (!input.hasAttribute('data-variable') && input !== document.body)
-            input = input.parentElement;
+          while (!input.hasAttribute('data-variable') && input !== document.body) input = input.parentElement;
 
-          var variable = input.getAttribute('data-variable')
-          var type = input.getAttribute('data-type')
+          var variable = input.getAttribute('data-variable');
+          var type = input.getAttribute('data-type');
 
-          if(typeof(variable) !== 'undefined') {
-            var values = {}
+          if (typeof variable !== 'undefined') {
+            var values = {};
 
-            var val = e.target.value
+            var val = e.target.value;
 
             switch (type) {
               case 'object':
-                val = JSON.parse(val)
+                val = JSON.parse(val);
                 break;
               default:
-
             }
 
-            values[variable] = val
+            values[variable] = val;
 
-            this.values = values
+            this.values = values;
           }
-        }
+        },
       });
     })();
   </script>
